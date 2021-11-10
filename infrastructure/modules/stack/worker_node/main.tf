@@ -1,5 +1,5 @@
 module "container_definition" {
-  source = "git::https://github.com/wellcomecollection/terraform-aws-ecs-service.git//modules/container_definition?ref=v3.0.0"
+  source = "git::https://github.com/wellcomecollection/terraform-aws-ecs-service.git//modules/container_definition?ref=v3.11.1"
 
   name  = var.name
   image = var.worker_node_container_image
@@ -49,7 +49,7 @@ module "container_definition" {
 }
 
 module "task_definition" {
-  source = "git::https://github.com/wellcomecollection/terraform-aws-ecs-service.git//modules/task_definition?ref=v3.0.0"
+  source = "git::https://github.com/wellcomecollection/terraform-aws-ecs-service.git//modules/task_definition?ref=v3.11.1"
 
   cpu    = var.cpu
   memory = var.memory
@@ -81,7 +81,7 @@ module "task_definition" {
 
 
 module "service" {
-  source = "git::https://github.com/wellcomecollection/terraform-aws-ecs-service.git//modules/service?ref=v3.0.0"
+  source = "git::https://github.com/wellcomecollection/terraform-aws-ecs-service.git//modules/service?ref=v3.11.1"
 
   cluster_arn  = var.cluster_arn
   service_name = var.name
@@ -100,7 +100,7 @@ module "service" {
 }
 
 module "credentials_permissions" {
-  source    = "git::https://github.com/wellcomecollection/terraform-aws-ecs-service.git//modules/secrets?ref=v3.0.0"
+  source    = "git::https://github.com/wellcomecollection/terraform-aws-ecs-service.git//modules/secrets?ref=v3.11.1"
   secrets   = local.secrets
   role_name = module.task_definition.task_execution_role_name
 }
