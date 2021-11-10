@@ -5,8 +5,6 @@ provider "aws" {
 
   region = var.region
 
-  version = "~> 3.10"
-
   default_tags {
     tags = {
       TerraformConfigurationURL = "https://github.com/wellcomecollection/goobi-infrastructure/tree/master/infrastructure/prod"
