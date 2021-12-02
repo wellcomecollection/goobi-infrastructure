@@ -13,7 +13,7 @@ resource "aws_lambda_function" "lambda_s3_trigger_goobi_stage_ep" {
 
   role    = aws_iam_role.lambda_stage_iam_role.arn
   handler = "s3_trigger_goobi.lambda_handler"
-  runtime = "python3.6"
+  runtime = "python3.9"
   timeout = "60"
   publish = true
 
@@ -63,7 +63,7 @@ resource "aws_lambda_function" "lambda_s3_trigger_goobi_stage_digitised" {
 
   role    = aws_iam_role.lambda_stage_iam_role.arn
   handler = "s3_trigger_goobi.lambda_handler"
-  runtime = "python3.6"
+  runtime = "python3.9"
   timeout = "60"
   publish = true
 
@@ -113,7 +113,7 @@ resource "aws_lambda_function" "lambda_s3_trigger_goobi_stage_video" {
 
   role    = aws_iam_role.lambda_stage_iam_role.arn
   handler = "s3_trigger_goobi.lambda_handler"
-  runtime = "python3.6"
+  runtime = "python3.9"
   timeout = "60"
   publish = true
 
@@ -163,7 +163,7 @@ resource "aws_lambda_function" "lambda_s3_trigger_goobi_stage_audio" {
 
   role    = aws_iam_role.lambda_stage_iam_role.arn
   handler = "s3_trigger_goobi.lambda_handler"
-  runtime = "python3.6"
+  runtime = "python3.9"
   timeout = "60"
   publish = true
 
