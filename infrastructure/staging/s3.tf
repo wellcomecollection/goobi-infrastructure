@@ -12,6 +12,10 @@ resource "aws_s3_bucket" "workflow-stage-configuration" {
     noncurrent_version_expiration {
       days = 90
     }
+
+    expiration {
+      expired_object_delete_marker = true
+    }
   }
 
   lifecycle {
@@ -36,6 +40,9 @@ resource "aws_s3_bucket" "workflow-stage-data" {
 
     noncurrent_version_expiration {
       days = 60
+    }
+    expiration {
+      expired_object_delete_marker = true
     }
   }
 }
@@ -84,6 +91,10 @@ resource "aws_s3_bucket" "workflow-stage-harvesting-results" {
 
     noncurrent_version_expiration {
       days = 90
+    }
+
+    expiration {
+      expired_object_delete_marker = true
     }
   }
 }
