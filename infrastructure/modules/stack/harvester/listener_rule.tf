@@ -1,5 +1,5 @@
 resource "aws_alb_listener_rule" "https" {
-  for_each     = var.source_ips
+  for_each     = nonsensitive(var.source_ips)
   listener_arn = var.alb_listener_arn
 
   action {
