@@ -36,13 +36,28 @@ resource "aws_s3_bucket" "workflow-data" {
   }
 
   lifecycle_rule {
+    id      = "expire_noncurrent_versions"
     enabled = true
 
+    noncurrent_version_transition {
+      days          = 30
+      storage_class = "STANDARD_IA"
+    }
     noncurrent_version_expiration {
       days = 60
     }
     expiration {
       expired_object_delete_marker = true
+    }
+  }
+
+  lifecycle_rule {
+    id      = "transition_objects_to_standard_ia"
+    enabled = true
+
+    transition {
+      days          = 30
+      storage_class = "STANDARD_IA"
     }
   }
 }

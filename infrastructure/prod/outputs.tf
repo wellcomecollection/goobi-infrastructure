@@ -46,6 +46,7 @@ output "production_iha_id" {
 
 output "production_iha_secret" {
   value = module.production_iam.in_house_archives_secret
+  sensitive = true
 }
 
 output "production_ihp_id" {
@@ -54,6 +55,7 @@ output "production_ihp_id" {
 
 output "production_ihp_secret" {
   value = module.production_iam.in_house_photography_secret
+  sensitive = true
 }
 
 output "production_dis_id" {
@@ -62,4 +64,5 @@ output "production_dis_id" {
 
 output "production_dis_secret" {
   value = module.production_iam.digitisation_services_secret
+  sensitive = true
 }
