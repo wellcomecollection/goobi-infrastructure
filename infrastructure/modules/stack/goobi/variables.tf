@@ -120,3 +120,8 @@ variable "goobi_external_job_dlq" {
   type    = string
   default = null
 }
+
+variable "goobi_external_bagit_job_queue" {
+  type    = string
+  default = null
+}
