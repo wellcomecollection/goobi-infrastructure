@@ -117,11 +117,12 @@ module "goobi" {
   cpu    = "2048"
   memory = "8192"
 
-  data_bucket_name             = aws_s3_bucket.workflow-stage-data.bucket
-  configuration_bucket_name    = aws_s3_bucket.workflow-stage-configuration.bucket
-  goobi_external_job_queue     = module.queues.queue_job_name
-  goobi_external_command_queue = module.queues.queue_command_name
-  goobi_external_job_dlq       = module.queues.dlq_job_name
+  data_bucket_name               = aws_s3_bucket.workflow-stage-data.bucket
+  configuration_bucket_name      = aws_s3_bucket.workflow-stage-configuration.bucket
+  goobi_external_job_queue       = module.queues.queue_job_name
+  goobi_external_command_queue   = module.queues.queue_command_name
+  goobi_external_job_dlq         = module.queues.dlq_job_name
+  goobi_external_bagit_job_queue = module.queues.queue_bagit_job_name
 
   cluster_arn = aws_ecs_cluster.cluster.arn
 
