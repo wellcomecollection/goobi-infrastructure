@@ -75,8 +75,9 @@ module "task_definition" {
     host_path = ""
   }]
 
-  launch_types = ["FARGATE"]
-  task_name    = var.name
+  launch_types          = [var.launch_type]
+  task_name             = var.name
+  placement_constraints = var.placement_constraints
 }
 
 
@@ -96,7 +97,10 @@ module "service" {
   deployment_minimum_healthy_percent = 0
   deployment_maximum_percent         = 100
 
-  desired_task_count = 1
+  launch_type                  = var.launch_type
+  ordered_placement_strategies = var.ordered_placement_strategies
+  placement_constraints        = var.placement_constraints
+  capacity_provider_strategies = var.capacity_provider_strategies
 }
 
 module "credentials_permissions" {

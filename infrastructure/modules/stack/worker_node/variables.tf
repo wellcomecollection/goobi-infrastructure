@@ -79,3 +79,32 @@ variable "ia_username_key" {
 variable "ia_password_key" {
   type = string
 }
+
+variable "launch_type" {
+  type    = string
+  default = "FARGATE"
+}
+variable "capacity_provider_strategies" {
+  type = list(object({
+    capacity_provider = string
+    weight            = number
+  }))
+  default = []
+}
+
+variable "ordered_placement_strategies" {
+  type = list(object({
+    type  = string
+    field = string
+  }))
+  default = []
+}
+
+variable "placement_constraints" {
+  type = list(object({
+    type       = string
+    expression = string
+  }))
+  default = []
+}
+
