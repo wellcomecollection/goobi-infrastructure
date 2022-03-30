@@ -42,6 +42,7 @@ module "container_definition" {
     WORKING_STORAGE_FAST         = var.working_storage_fast_path
     S3_DATA_BUCKET               = var.data_bucket_name
     TZ                           = "Europe/London"
+    AWS_DEFAULT_REGION           = var.default_region
   }
 
   secrets = local.secrets
