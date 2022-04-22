@@ -357,13 +357,13 @@ module "worker_node_bagit_autoscaling" {
 
   name = "${local.environment_name}-worker_node_bagit_scaling"
 
-  min_capacity = 1
+  min_capacity = 0
   max_capacity = 2
 
   cluster_name = aws_ecs_cluster.cluster-ec2.name
   service_name = module.worker_node_bagit.name
 
-  scale_down_adjustment = -4
+  scale_down_adjustment = -1
   scale_up_adjustment   = 1
 }
 resource "aws_cloudwatch_metric_alarm" "high_bagit" {
@@ -371,7 +371,7 @@ resource "aws_cloudwatch_metric_alarm" "high_bagit" {
 
   alarm_name          = "${local.environment_name}-workernode-scaling-alarm-bagit-high"
   alarm_description   = "Alarm monitors high utilization for scaling up"
-  comparison_operator = "GreaterThanThreshold"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 1
   threshold           = 1
   alarm_actions       = [module.worker_node_bagit_autoscaling.scale_up_arn]
