@@ -281,11 +281,13 @@ resource "aws_cloudwatch_metric_alarm" "low" {
   }
 }
 
+# ECS Cluster based on EC2 instances, used for bagit generation via worker node
 resource "aws_ecs_cluster" "cluster-ec2" {
   name               = "${local.environment_name}_ec2"
   capacity_providers = [module.ec2_cluster_capacity_provider.name]
 }
 
+# Capacity provider to get autoscaling EC2 instances
 module "ec2_cluster_capacity_provider" {
   source = "../modules/ec2_capacity_provider"
 
@@ -308,6 +310,7 @@ module "ec2_cluster_capacity_provider" {
   ]
 }
 
+# worker node to be used for bagit creation
 module "worker_node_bagit" {
   source = "../modules/stack/worker_node"
 
@@ -356,12 +359,14 @@ module "worker_node_bagit" {
   }]
 }
 
+# cloudwatch log group as needed for above bagit worker node (not automatically created)
 resource "aws_cloudwatch_log_group" "cloudwatch_log_group_workernode_bagit_stage" {
   name = "ecs/${local.environment_name}-workernode_bagit"
 
   retention_in_days = "14"
 }
 
+# autoscaling for bagit worker node instances
 module "worker_node_bagit_autoscaling" {
   source = "git::github.com/wellcomecollection/terraform-aws-ecs-service.git//modules/autoscaling?ref=v3.5.2"
 
