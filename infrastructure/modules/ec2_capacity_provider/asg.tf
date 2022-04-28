@@ -1,3 +1,6 @@
+locals {
+  ebs_device_name = "/dev/xvdc"
+}
 resource "aws_autoscaling_group" "asg" {
   name                = "${var.name}_asg"
   max_size            = var.max_instances
@@ -51,8 +54,7 @@ resource "aws_launch_template" "launch_template" {
     for_each = var.ebs_size_gb > 0 ? [{}] : []
 
     content {
-      // The instance volume used by Docker
-      device_name = "/dev/xvdcz"
+      device_name = local.ebs_device_name
 
       ebs {
         volume_size           = var.ebs_size_gb
@@ -98,6 +100,8 @@ data "template_file" "user_data" {
   template = file("${path.module}/user_data.tpl")
 
   vars = {
-    cluster_name = var.cluster_name
+    cluster_name  = var.cluster_name
+    ebs_volume_id = local.ebs_device_name
+    ebs_host_path = "/ebs"
   }
 }
