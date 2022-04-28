@@ -71,10 +71,7 @@ module "task_definition" {
     }
   ]
 
-  volumes = [{
-    name      = "scratch"
-    host_path = null
-  }]
+  volumes = var.volumes
 
   launch_types          = [var.launch_type]
   task_name             = var.name

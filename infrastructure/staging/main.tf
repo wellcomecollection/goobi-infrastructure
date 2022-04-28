@@ -179,6 +179,12 @@ module "worker_node_1" {
   goobi_external_command_queue = module.queues.queue_command_name
   goobi_hostname               = "${module.goobi.name}.${aws_service_discovery_private_dns_namespace.namespace.name}"
 
+
+  volumes = [{
+    name      = "scratch"
+    host_path = null
+  }]
+
   cluster_arn = aws_ecs_cluster.cluster.arn
 
   subnets = module.network.private_subnets
@@ -281,7 +287,7 @@ resource "aws_ecs_cluster" "cluster-ec2" {
 }
 
 module "ec2_cluster_capacity_provider" {
-  source = "git::github.com/wellcomecollection/terraform-aws-ecs-service.git//modules/ec2_capacity_provider?ref=v3.12.0"
+  source = "../modules/ec2_capacity_provider"
 
   name = "${local.environment_name}_ec2_cluster"
 
@@ -290,7 +296,7 @@ module "ec2_cluster_capacity_provider" {
   // This is a known issue https://github.com/terraform-providers/terraform-provider-aws/issues/12739
   cluster_name = "${local.environment_name}_ec2"
 
-  instance_type           = "t3a.medium"
+  instance_type           = "t3.medium"
   max_instances           = 1
   use_spot_purchasing     = false
   scaling_action_cooldown = 240
@@ -308,7 +314,7 @@ module "worker_node_bagit" {
   name = "${local.environment_name}-workernode_bagit"
 
   cpu    = "2048"
-  memory = "2048"
+  memory = "3072"
 
   working_storage_path         = "/var/scratch/"
   data_bucket_name             = aws_s3_bucket.workflow-stage-data.bucket
@@ -344,6 +350,10 @@ module "worker_node_bagit" {
     type  = "spread"
     field = "host"
   }]
+  volumes = [{
+    name      = "scratch"
+    host_path = "/ebs"
+  }]
 }
 
 resource "aws_cloudwatch_log_group" "cloudwatch_log_group_workernode_bagit_stage" {
@@ -358,7 +368,7 @@ module "worker_node_bagit_autoscaling" {
   name = "${local.environment_name}-worker_node_bagit_scaling"
 
   min_capacity = 0
-  max_capacity = 2
+  max_capacity = 1
 
   cluster_name = aws_ecs_cluster.cluster-ec2.name
   service_name = module.worker_node_bagit.name

@@ -109,6 +109,14 @@ variable "placement_constraints" {
 }
 
 variable "default_region" {
-  type = string
+  type    = string
   default = "eu-west-1"
+}
+
+variable "volumes" {
+  type = list(object({
+    name      = string
+    host_path = string
+  }))
+  default = []
 }
