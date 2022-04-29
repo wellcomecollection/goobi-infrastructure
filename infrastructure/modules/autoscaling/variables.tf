@@ -25,3 +25,13 @@ variable "metric_interval_lower_bound_scale_up" {
 variable "metric_interval_upper_bound_scale_down" {
   default = 0
 }
+
+variable "cooldown_scale_up" {
+  type    = number
+  default = 60
+}
+
+variable "cooldown_scale_down" {
+  type    = number
+  default = 60
+}
