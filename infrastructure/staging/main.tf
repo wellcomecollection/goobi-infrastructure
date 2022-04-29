@@ -316,8 +316,8 @@ module "worker_node_bagit" {
 
   name = "${local.environment_name}-workernode_bagit"
 
-  cpu    = "2048"
-  memory = "3072"
+  cpu    = null
+  memory = "3840"
 
   working_storage_path         = "/var/scratch/"
   data_bucket_name             = aws_s3_bucket.workflow-stage-data.bucket
