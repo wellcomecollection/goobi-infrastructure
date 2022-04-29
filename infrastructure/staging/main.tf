@@ -302,7 +302,7 @@ module "ec2_cluster_capacity_provider" {
   max_instances           = 1
   use_spot_purchasing     = false
   scaling_action_cooldown = 240
-  ebs_size_gb             = 500
+  ebs_size_gb             = 400
 
   subnets = module.network.private_subnets
   security_group_ids = [
