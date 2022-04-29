@@ -368,7 +368,7 @@ resource "aws_cloudwatch_log_group" "cloudwatch_log_group_workernode_bagit_stage
 
 # autoscaling for bagit worker node instances
 module "worker_node_bagit_autoscaling" {
-  source = "git::github.com/wellcomecollection/terraform-aws-ecs-service.git//modules/autoscaling?ref=v3.5.2"
+  source = "../modules/autoscaling"
 
   name = "${local.environment_name}-worker_node_bagit_scaling"
 
@@ -380,6 +380,9 @@ module "worker_node_bagit_autoscaling" {
 
   scale_down_adjustment = -1
   scale_up_adjustment   = 1
+
+  cooldown_scale_up   = 300
+  cooldown_scale_down = 60
 }
 resource "aws_cloudwatch_metric_alarm" "high_bagit" {
   count = 1
