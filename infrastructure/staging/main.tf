@@ -299,7 +299,7 @@ module "ec2_cluster_capacity_provider" {
   cluster_name = "${local.environment_name}_ec2"
 
   instance_type           = "t3.medium"
-  max_instances           = 1
+  max_instances           = 2
   use_spot_purchasing     = false
   scaling_action_cooldown = 240
   ebs_size_gb             = 400
@@ -373,7 +373,7 @@ module "worker_node_bagit_autoscaling" {
   name = "${local.environment_name}-worker_node_bagit_scaling"
 
   min_capacity = 0
-  max_capacity = 1
+  max_capacity = 2
 
   cluster_name = aws_ecs_cluster.cluster-ec2.name
   service_name = module.worker_node_bagit.name
