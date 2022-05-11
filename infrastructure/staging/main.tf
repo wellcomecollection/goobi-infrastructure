@@ -317,7 +317,7 @@ module "worker_node_bagit" {
   name = "${local.environment_name}-workernode_bagit"
 
   cpu    = null
-  memory = "3840"
+  memory = "1900"
 
   working_storage_path         = "/var/scratch/"
   data_bucket_name             = aws_s3_bucket.workflow-stage-data.bucket
@@ -350,8 +350,8 @@ module "worker_node_bagit" {
     weight            = 100
   }]
   ordered_placement_strategies = [{
-    type  = "spread"
-    field = "host"
+    type  = "binpack"
+    field = "memory"
   }]
   volumes = [{
     name      = "scratch"
@@ -373,7 +373,7 @@ module "worker_node_bagit_autoscaling" {
   name = "${local.environment_name}-worker_node_bagit_scaling"
 
   min_capacity = 0
-  max_capacity = 2
+  max_capacity = 4
 
   cluster_name = aws_ecs_cluster.cluster-ec2.name
   service_name = module.worker_node_bagit.name
