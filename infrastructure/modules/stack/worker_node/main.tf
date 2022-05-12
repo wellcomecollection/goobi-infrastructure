@@ -106,3 +106,80 @@ module "credentials_permissions" {
   secrets   = local.secrets
   role_name = module.task_definition.task_execution_role_name
 }
+
+module "autoscaling" {
+  source = "../../autoscaling"
+
+  name = var.name
+
+  min_capacity = var.autoscaling_min_capacity
+  max_capacity = var.autoscaling_max_capacity
+
+  cluster_name = var.cluster_name
+  service_name = module.service.name
+
+  scale_down_adjustment = var.autoscaling_scale_down_adjustment
+  scale_up_adjustment   = var.autoscaling_scale_up_adjustment
+}
+
+resource "aws_cloudwatch_metric_alarm" "high" {
+  count = 1
+
+  alarm_name          = "${var.name}-scaling-alarm-high"
+  alarm_description   = "Alarm monitors high utilization for scaling up"
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods  = var.scale_up_evaluation_periods
+  threshold           = var.scale_up_threshold
+  alarm_actions       = [module.autoscaling.scale_up_arn]
+
+  namespace   = "AWS/SQS"
+  metric_name = "ApproximateNumberOfMessagesVisible"
+  period      = "60"
+  statistic   = "Maximum"
+  dimensions = {
+    QueueName = var.queue_job_name
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "low" {
+  count = 1
+
+  alarm_name          = "${var.name}-scaling-alarm-low"
+  alarm_description   = "Alarm monitors low utilization for scaling down"
+  comparison_operator = "LessThanOrEqualToThreshold"
+  evaluation_periods  = var.scale_down_evaluation_periods
+  threshold           = var.scale_down_threshold
+  alarm_actions       = [module.autoscaling.scale_down_arn]
+
+  metric_query {
+    id          = "${var.name}_scale_down"
+    expression  = "visible+invisible"
+    label       = "Visible plus invisible messages"
+    return_data = "true"
+  }
+
+  metric_query {
+    id = "visible"
+    metric {
+      namespace   = "AWS/SQS"
+      metric_name = "ApproximateNumberOfMessagesVisible"
+      period      = "60"
+      stat        = "Maximum"
+      dimensions = {
+        QueueName = var.queue_job_name
+      }
+    }
+  }
+  metric_query {
+    id = "invisible"
+    metric {
+      namespace   = "AWS/SQS"
+      metric_name = "ApproximateNumberOfMessagesNotVisible"
+      period      = "60"
+      stat        = "Maximum"
+      dimensions = {
+        QueueName = var.queue_job_name
+      }
+    }
+  }
+}

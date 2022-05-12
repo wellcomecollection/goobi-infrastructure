@@ -64,6 +64,10 @@ variable "cluster_arn" {
   type = string
 }
 
+variable "cluster_name" {
+  type = string
+}
+
 variable "subnets" {
   type = list(string)
 }
@@ -119,4 +123,46 @@ variable "volumes" {
     host_path = string
   }))
   default = []
+}
+
+variable "autoscaling_min_capacity" {
+  type    = number
+  default = 1
+}
+
+variable "autoscaling_max_capacity" {
+  type    = number
+  default = 5
+}
+variable "autoscaling_scale_up_adjustment" {
+  type    = number
+  default = 1
+}
+
+variable "autoscaling_scale_down_adjustment" {
+  type    = number
+  default = -4
+}
+
+variable "scale_up_evaluation_periods" {
+  type    = number
+  default = 1
+}
+
+variable "scale_down_evaluation_periods" {
+  type    = number
+  default = 1
+}
+variable "scale_up_threshold" {
+  type    = number
+  default = 1
+}
+
+variable "scale_down_threshold" {
+  type    = number
+  default = 0
+}
+
+variable "queue_job_name" {
+  type = string
 }

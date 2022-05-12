@@ -185,7 +185,8 @@ module "worker_node_1" {
     host_path = null
   }]
 
-  cluster_arn = aws_ecs_cluster.cluster.arn
+  cluster_arn  = aws_ecs_cluster.cluster.arn
+  cluster_name = aws_ecs_cluster.cluster.name
 
   subnets = module.network.private_subnets
 
@@ -202,84 +203,9 @@ module "worker_node_1" {
   ia_password_key = local.ia_password_key
 
   worker_node_container_image = local.worker_node_container_image
+  queue_job_name              = module.queues.queue_job_name
 }
 
-module "worker_node_1_autoscaling" {
-  source = "../modules/autoscaling"
-
-  name = "${local.environment_name}-worker_node_scaling"
-
-  min_capacity = 1
-  max_capacity = 5
-
-  cluster_name = aws_ecs_cluster.cluster.name
-  service_name = module.worker_node_1.name
-
-  scale_down_adjustment = -4
-  scale_up_adjustment   = 1
-}
-
-resource "aws_cloudwatch_metric_alarm" "high" {
-  count = 1
-
-  alarm_name          = "${local.environment_name}-workernode-scaling-alarm-high"
-  alarm_description   = "Alarm monitors high utilization for scaling up"
-  comparison_operator = "GreaterThanThreshold"
-  evaluation_periods  = 1
-  threshold           = 1
-  alarm_actions       = [module.worker_node_1_autoscaling.scale_up_arn]
-
-  namespace   = "AWS/SQS"
-  metric_name = "ApproximateNumberOfMessagesVisible"
-  period      = "60"
-  statistic   = "Maximum"
-  dimensions = {
-    QueueName = module.queues.queue_job_name
-  }
-}
-
-resource "aws_cloudwatch_metric_alarm" "low" {
-  count = 1
-
-  alarm_name          = "${local.environment_name}-workernode-scaling-alarm-low"
-  alarm_description   = "Alarm monitors low utilization for scaling down"
-  comparison_operator = "LessThanOrEqualToThreshold"
-  evaluation_periods  = 1
-  threshold           = 0
-  alarm_actions       = [module.worker_node_1_autoscaling.scale_down_arn]
-
-  metric_query {
-    id          = "workernode_scale_down"
-    expression  = "visible+invisible"
-    label       = "Visible plus invisible messages"
-    return_data = "true"
-  }
-
-  metric_query {
-    id = "visible"
-    metric {
-      namespace   = "AWS/SQS"
-      metric_name = "ApproximateNumberOfMessagesVisible"
-      period      = "60"
-      stat        = "Maximum"
-      dimensions = {
-        QueueName = module.queues.queue_job_name
-      }
-    }
-  }
-  metric_query {
-    id = "invisible"
-    metric {
-      namespace   = "AWS/SQS"
-      metric_name = "ApproximateNumberOfMessagesNotVisible"
-      period      = "60"
-      stat        = "Maximum"
-      dimensions = {
-        QueueName = module.queues.queue_job_name
-      }
-    }
-  }
-}
 
 # ECS Cluster based on EC2 instances, used for bagit generation via worker node
 resource "aws_ecs_cluster" "cluster-ec2" {
@@ -326,7 +252,8 @@ module "worker_node_bagit" {
   goobi_external_command_queue = module.queues.queue_command_name
   goobi_hostname               = "${module.goobi.name}.${aws_service_discovery_private_dns_namespace.namespace.name}"
 
-  cluster_arn = aws_ecs_cluster.cluster-ec2.arn
+  cluster_arn  = aws_ecs_cluster.cluster-ec2.arn
+  cluster_name = aws_ecs_cluster.cluster-ec2.name
 
   subnets = module.network.private_subnets
 
@@ -357,6 +284,15 @@ module "worker_node_bagit" {
     name      = "scratch"
     host_path = "/ebs"
   }]
+
+  autoscaling_min_capacity          = 0
+  autoscaling_max_capacity          = 4
+  autoscaling_scale_up_adjustment   = 1
+  autoscaling_scale_down_adjustment = -1
+  scale_up_threshold                = 0
+  scale_down_threshold              = 0
+
+  queue_job_name = module.queues.queue_bagit_job_name
 }
 
 # cloudwatch log group as needed for above bagit worker node (not automatically created)
@@ -366,82 +302,3 @@ resource "aws_cloudwatch_log_group" "cloudwatch_log_group_workernode_bagit_stage
   retention_in_days = "14"
 }
 
-# autoscaling for bagit worker node instances
-module "worker_node_bagit_autoscaling" {
-  source = "../modules/autoscaling"
-
-  name = "${local.environment_name}-worker_node_bagit_scaling"
-
-  min_capacity = 0
-  max_capacity = 4
-
-  cluster_name = aws_ecs_cluster.cluster-ec2.name
-  service_name = module.worker_node_bagit.name
-
-  scale_down_adjustment = -1
-  scale_up_adjustment   = 1
-
-  cooldown_scale_up   = 300
-  cooldown_scale_down = 60
-}
-resource "aws_cloudwatch_metric_alarm" "high_bagit" {
-  count = 1
-
-  alarm_name          = "${local.environment_name}-workernode-scaling-alarm-bagit-high"
-  alarm_description   = "Alarm monitors high utilization for scaling up"
-  comparison_operator = "GreaterThanOrEqualToThreshold"
-  evaluation_periods  = 1
-  threshold           = 1
-  alarm_actions       = [module.worker_node_bagit_autoscaling.scale_up_arn]
-
-  namespace   = "AWS/SQS"
-  metric_name = "ApproximateNumberOfMessagesVisible"
-  period      = "60"
-  statistic   = "Maximum"
-  dimensions = {
-    QueueName = module.queues.queue_bagit_job_name
-  }
-}
-
-resource "aws_cloudwatch_metric_alarm" "low_bagit" {
-  count = 1
-
-  alarm_name          = "${local.environment_name}-workernode-scaling-alarm-bagit-low"
-  alarm_description   = "Alarm monitors low utilization for scaling down"
-  comparison_operator = "LessThanOrEqualToThreshold"
-  evaluation_periods  = 1
-  threshold           = 0
-  alarm_actions       = [module.worker_node_bagit_autoscaling.scale_down_arn]
-
-  metric_query {
-    id          = "workernode_bagit_scale_down"
-    expression  = "visible+invisible"
-    label       = "Visible plus invisible messages"
-    return_data = "true"
-  }
-
-  metric_query {
-    id = "visible"
-    metric {
-      namespace   = "AWS/SQS"
-      metric_name = "ApproximateNumberOfMessagesVisible"
-      period      = "60"
-      stat        = "Maximum"
-      dimensions = {
-        QueueName = module.queues.queue_bagit_job_name
-      }
-    }
-  }
-  metric_query {
-    id = "invisible"
-    metric {
-      namespace   = "AWS/SQS"
-      metric_name = "ApproximateNumberOfMessagesNotVisible"
-      period      = "60"
-      stat        = "Maximum"
-      dimensions = {
-        QueueName = module.queues.queue_bagit_job_name
-      }
-    }
-  }
-}
