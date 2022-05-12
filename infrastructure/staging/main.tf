@@ -205,7 +205,7 @@ module "worker_node_1" {
 }
 
 module "worker_node_1_autoscaling" {
-  source = "git::github.com/wellcomecollection/terraform-aws-ecs-service.git//modules/autoscaling?ref=v3.5.2"
+  source = "../modules/autoscaling"
 
   name = "${local.environment_name}-worker_node_scaling"
 
