@@ -152,7 +152,7 @@ resource "aws_cloudwatch_metric_alarm" "low" {
   alarm_actions       = [module.autoscaling.scale_down_arn]
 
   metric_query {
-    id          = "${var.name}_scale_down"
+    id          = replace("${var.name}_scale_down","-","_")
     expression  = "visible+invisible"
     label       = "Visible plus invisible messages"
     return_data = "true"
