@@ -189,7 +189,7 @@ module "worker_node_1" {
     host_path = null
   }]
 
-  cluster_arn = aws_ecs_cluster.cluster.arn
+  cluster_arn  = aws_ecs_cluster.cluster.arn
   cluster_name = aws_ecs_cluster.cluster.name
 
   subnets = module.network.private_subnets
@@ -209,8 +209,103 @@ module "worker_node_1" {
   worker_node_container_image = local.worker_node_container_image
   queue_job_name              = module.queues.queue_job_name
 
-  autoscaling_min_capacity = 1
-  autoscaling_max_capacity = 10
+  autoscaling_min_capacity    = 1
+  autoscaling_max_capacity    = 10
   scale_up_evaluation_periods = 5
-  scale_up_threshold = 0
+  scale_up_threshold          = 0
+}
+
+# ECS Cluster based on EC2 instances, used for bagit generation via worker node
+resource "aws_ecs_cluster" "cluster-ec2" {
+  name               = "${local.environment_name}_ec2"
+  capacity_providers = [module.ec2_cluster_capacity_provider.name]
+}
+
+# Capacity provider to get autoscaling EC2 instances
+module "ec2_cluster_capacity_provider" {
+  source = "../modules/ec2_capacity_provider"
+
+  name = "${local.environment_name}_ec2_cluster"
+
+  // Setting this variable from aws_ecs_cluster.cluster.name creates a cycle
+  // The cluster name is required for the instance user data script
+  // This is a known issue https://github.com/terraform-providers/terraform-provider-aws/issues/12739
+  cluster_name = "${local.environment_name}_ec2"
+
+  instance_type           = "t3.medium"
+  max_instances           = 2
+  use_spot_purchasing     = false
+  scaling_action_cooldown = 240
+  ebs_size_gb             = 400
+
+  subnets = module.network.private_subnets
+  security_group_ids = [
+    aws_security_group.service_egress.id,
+  ]
+}
+
+# worker node to be used for bagit creation
+module "worker_node_bagit" {
+  source = "../modules/stack/worker_node"
+
+  name = "${local.environment_name}-workernode_bagit"
+
+  cpu    = null
+  memory = "1900"
+
+  working_storage_path         = "/var/scratch/"
+  data_bucket_name             = aws_s3_bucket.workflow-data.bucket
+  configuration_bucket_name    = aws_s3_bucket.workflow-configuration.bucket
+  goobi_external_job_queue     = module.queues.queue_bagit_job_name
+  goobi_external_command_queue = module.queues.queue_command_name
+  goobi_hostname               = "${module.goobi.name}.${aws_service_discovery_private_dns_namespace.namespace.name}"
+
+  cluster_arn  = aws_ecs_cluster.cluster-ec2.arn
+  cluster_name = aws_ecs_cluster.cluster-ec2.name
+
+  subnets = module.network.private_subnets
+
+  security_group_ids = [
+    aws_security_group.service_egress.id,
+    aws_security_group.interservice.id,
+    aws_security_group.efs.id
+  ]
+
+  efs_id                 = module.efs.efs_id
+  working_storage_efs_id = module.efs-workernode.efs_id
+
+  ia_username_key = local.ia_username_key
+  ia_password_key = local.ia_password_key
+
+  worker_node_container_image = local.worker_node_container_image
+
+  launch_type = "EC2"
+  capacity_provider_strategies = [{
+    capacity_provider = module.ec2_cluster_capacity_provider.name
+    weight            = 100
+  }]
+  ordered_placement_strategies = [{
+    type  = "binpack"
+    field = "memory"
+  }]
+  volumes = [{
+    name      = "scratch"
+    host_path = "/ebs"
+  }]
+
+  autoscaling_min_capacity          = 0
+  autoscaling_max_capacity          = 4
+  autoscaling_scale_up_adjustment   = 1
+  autoscaling_scale_down_adjustment = -1
+  scale_up_threshold                = 0
+  scale_down_threshold              = 0
+
+  queue_job_name = module.queues.queue_bagit_job_name
+}
+
+# cloudwatch log group as needed for above bagit worker node (not automatically created)
+resource "aws_cloudwatch_log_group" "cloudwatch_log_group_workernode_bagit_stage" {
+  name = "ecs/${local.environment_name}-workernode_bagit"
+
+  retention_in_days = "14"
 }
