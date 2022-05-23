@@ -117,3 +117,33 @@ resource "aws_iam_role_policy" "ecs_worker_node_1_read_write_queue" {
   role   = module.worker_node_1.task_role
   policy = module.queues.read_write_policy
 }
+
+# worker node bagit
+resource "aws_iam_role_policy" "ecs_worker_node_bagit_read_write_queue" {
+  role   = module.worker_node_bagit.task_role
+  policy = module.queues.read_write_policy
+}
+
+resource "aws_iam_role_policy" "ecs_worker_node_bagit_s3_config_read" {
+  role   = module.worker_node_bagit.task_role
+  policy = data.aws_iam_policy_document.s3_read_workflow-configuration.json
+}
+
+resource "aws_iam_role_policy" "ecs_worker_node_bagit_s3_data_rw" {
+  role   = module.worker_node_bagit.task_role
+  policy = data.aws_iam_policy_document.s3_rw_workflow-data.json
+}
+
+resource "aws_iam_role_policy" "ecs_worker_node_bagit_s3_export_bagit_stage_rw" {
+  role   = module.worker_node_bagit.task_role
+  policy = data.aws_iam_policy_document.s3_rw_workflow-export-bagit-stage.json
+}
+
+resource "aws_iam_role_policy" "ecs_worker_node_bagit_s3_storage_archive_access" {
+  role   = module.worker_node_bagit.task_role
+  policy = data.aws_iam_policy_document.allow_storage_archive_access.json
+}
+resource "aws_iam_role_policy" "ecs_worker_node_bagit_cloudwatch_permissions" {
+  role   = module.worker_node_bagit.task_role
+  policy = data.aws_iam_policy_document.cloudwatch_logs.json
+}
