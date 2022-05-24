@@ -11,6 +11,8 @@ resource "aws_autoscaling_group" "asg" {
   health_check_type         = "EC2"
   health_check_grace_period = 180
 
+  protect_from_scale_in = true
+
   launch_template {
     id      = aws_launch_template.launch_template.id
     version = aws_launch_template.launch_template.latest_version
