@@ -134,9 +134,9 @@ resource "aws_iam_role_policy" "ecs_worker_node_bagit_s3_data_rw" {
   policy = data.aws_iam_policy_document.s3_rw_workflow-data.json
 }
 
-resource "aws_iam_role_policy" "ecs_worker_node_bagit_s3_export_bagit_stage_rw" {
+resource "aws_iam_role_policy" "ecs_worker_node_bagit_s3_export_bagit_rw" {
   role   = module.worker_node_bagit.task_role
-  policy = data.aws_iam_policy_document.s3_rw_workflow-export-bagit-stage.json
+  policy = data.aws_iam_policy_document.s3_rw_workflow-export-bagit.json
 }
 
 resource "aws_iam_role_policy" "ecs_worker_node_bagit_s3_storage_archive_access" {
