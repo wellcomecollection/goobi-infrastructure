@@ -5,7 +5,7 @@ resource "aws_rds_cluster_instance" "cluster_instances" {
   cluster_identifier   = aws_rds_cluster.default.id
   instance_class       = var.instance_class
   db_subnet_group_name = aws_db_subnet_group.default.name
-  publicly_accessible  = true
+  publicly_accessible  = false
   engine_version       = var.engine_version
   engine               = var.engine
 }
