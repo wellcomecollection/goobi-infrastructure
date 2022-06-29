@@ -40,3 +40,15 @@ variable "db_access_security_group" {
   type = list(string)
 }
 
+variable "engine_version" {
+  type = string
+  default = ""
+}
+
+variable "engine" {
+  type = string
+}
+
+variable "sg_name" {
+  type = string
+}
