@@ -51,8 +51,8 @@ module "harvester" {
   harvester_container_image = local.harvester_container_image
   proxy_container_image     = local.proxy_container_image
 
-  db_server       = module.goobi_rds_cluster.host
-  db_port         = module.goobi_rds_cluster.port
+  db_server       = module.goobi_rds_cluster_aurora3.host
+  db_port         = module.goobi_rds_cluster_aurora3.port
   db_name         = "harvester"
   db_user_key     = local.db_user_key
   db_password_key = local.db_password_key
@@ -98,8 +98,8 @@ module "itm" {
   itm_container_image   = local.itm_container_image
   proxy_container_image = local.proxy_container_image
 
-  db_server       = module.goobi_rds_cluster.host
-  db_port         = module.goobi_rds_cluster.port
+  db_server       = module.goobi_rds_cluster_aurora3.host
+  db_port         = module.goobi_rds_cluster_aurora3.port
   db_name         = "itm"
   db_user_key     = local.db_user_key
   db_password_key = local.db_password_key
@@ -146,8 +146,8 @@ module "goobi" {
   goobi_container_image = local.goobi_container_image
   proxy_container_image = local.proxy_container_image
 
-  db_server       = module.goobi_rds_cluster.host
-  db_port         = module.goobi_rds_cluster.port
+  db_server       = module.goobi_rds_cluster_aurora3.host
+  db_port         = module.goobi_rds_cluster_aurora3.port
   db_name         = "goobi"
   db_user_key     = local.db_user_key
   db_password_key = local.db_password_key
