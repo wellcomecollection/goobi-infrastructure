@@ -19,6 +19,7 @@ module "goobi_rds_cluster" {
   db_access_security_group = [aws_security_group.interservice.id]
   vpc_security_group_ids   = [aws_security_group.interservice.id]
   sg_name                  = "goobi_sg"
+  publicly_accessible      = true
 }
 
 module "goobi_rds_cluster_aurora3" {
