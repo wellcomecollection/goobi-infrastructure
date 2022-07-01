@@ -41,7 +41,7 @@ variable "db_access_security_group" {
 }
 
 variable "engine_version" {
-  type = string
+  type    = string
   default = ""
 }
 
@@ -51,4 +51,9 @@ variable "engine" {
 
 variable "sg_name" {
   type = string
+}
+
+variable "publicly_accessible" {
+  type    = bool
+  default = false
 }
