@@ -43,4 +43,28 @@ module "goobi_rds_cluster_aurora3" {
   db_access_security_group = [aws_security_group.interservice.id]
   vpc_security_group_ids   = [aws_security_group.interservice.id]
   sg_name                  = "goobi-aurora3_sg"
+  cluster_parameter_group  = aws_rds_cluster_parameter_group.goobi-aurora3.name
+  db_parameter_group       = aws_db_parameter_group.goobi-aurora3.name
+}
+
+resource "aws_rds_cluster_parameter_group" "goobi-aurora3" {
+  name        = "goobi-aurora3"
+  family      = "aurora-mysql8.0"
+  description = "RDS cluster parameter group for workflow production"
+
+  parameter {
+    name  = "slow_query_log"
+    value = "1"
+  }
+}
+
+resource "aws_db_parameter_group" "goobi-aurora3" {
+  name        = "goobi-aurora3"
+  family      = "aurora-mysql8.0"
+  description = "RDS cluster parameter group for workflow production"
+
+  parameter {
+    name  = "slow_query_log"
+    value = "1"
+  }
 }
