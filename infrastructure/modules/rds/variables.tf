@@ -57,3 +57,13 @@ variable "publicly_accessible" {
   type    = bool
   default = false
 }
+
+variable "cluster_parameter_group" {
+  type    = string
+  default = ""
+}
+
+variable "db_parameter_group" {
+  type    = string
+  default = ""
+}
