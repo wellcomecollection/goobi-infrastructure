@@ -27,20 +27,10 @@ resource "aws_rds_cluster_parameter_group" "goobi-aurora3" {
   name        = "goobi-aurora3"
   family      = "aurora-mysql8.0"
   description = "RDS cluster parameter group for workflow production"
-
-  parameter {
-    name  = "slow_query_log"
-    value = "1"
-  }
 }
 
 resource "aws_db_parameter_group" "goobi-aurora3" {
   name        = "goobi-aurora3"
   family      = "aurora-mysql8.0"
   description = "RDS cluster parameter group for workflow production"
-
-  parameter {
-    name  = "slow_query_log"
-    value = "1"
-  }
 }
