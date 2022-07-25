@@ -19,3 +19,7 @@ variable "lb_controlled_ingress_cidrs" {
   type = list(string)
 }
 
+variable "idle_timeout" {
+  type = number
+  default = 120
+}
