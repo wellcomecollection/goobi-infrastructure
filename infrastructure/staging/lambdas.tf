@@ -1,4 +1,4 @@
-data "aws_s3_bucket_object" "lambda_s3_trigger_goobi_package" {
+data "aws_s3_object" "lambda_s3_trigger_goobi_package" {
   bucket = data.aws_s3_bucket.workflow-infra.bucket
   key    = "lambdas/s3_trigger_goobi.zip"
 }
@@ -7,9 +7,9 @@ resource "aws_lambda_function" "lambda_s3_trigger_goobi_stage_ep" {
   description   = "lambda to call Goobi API for import after successful S3 upload"
   function_name = "s3_trigger_goobi_stage_ep"
 
-  s3_bucket         = data.aws_s3_bucket_object.lambda_s3_trigger_goobi_package.bucket
-  s3_key            = data.aws_s3_bucket_object.lambda_s3_trigger_goobi_package.key
-  s3_object_version = data.aws_s3_bucket_object.lambda_s3_trigger_goobi_package.version_id
+  s3_bucket         = data.aws_s3_object.lambda_s3_trigger_goobi_package.bucket
+  s3_key            = data.aws_s3_object.lambda_s3_trigger_goobi_package.key
+  s3_object_version = data.aws_s3_object.lambda_s3_trigger_goobi_package.version_id
 
   role    = aws_iam_role.lambda_stage_iam_role.arn
   handler = "s3_trigger_goobi.lambda_handler"
@@ -57,9 +57,9 @@ resource "aws_lambda_function" "lambda_s3_trigger_goobi_stage_digitised" {
   description   = "lambda to call Goobi API for import after successful S3 upload"
   function_name = "s3_trigger_goobi_stage_digitised"
 
-  s3_bucket         = data.aws_s3_bucket_object.lambda_s3_trigger_goobi_package.bucket
-  s3_key            = data.aws_s3_bucket_object.lambda_s3_trigger_goobi_package.key
-  s3_object_version = data.aws_s3_bucket_object.lambda_s3_trigger_goobi_package.version_id
+  s3_bucket         = data.aws_s3_object.lambda_s3_trigger_goobi_package.bucket
+  s3_key            = data.aws_s3_object.lambda_s3_trigger_goobi_package.key
+  s3_object_version = data.aws_s3_object.lambda_s3_trigger_goobi_package.version_id
 
   role    = aws_iam_role.lambda_stage_iam_role.arn
   handler = "s3_trigger_goobi.lambda_handler"
@@ -107,9 +107,9 @@ resource "aws_lambda_function" "lambda_s3_trigger_goobi_stage_video" {
   description   = "lambda to call Goobi API for import after successful S3 upload"
   function_name = "s3_trigger_goobi_stage_video"
 
-  s3_bucket         = data.aws_s3_bucket_object.lambda_s3_trigger_goobi_package.bucket
-  s3_key            = data.aws_s3_bucket_object.lambda_s3_trigger_goobi_package.key
-  s3_object_version = data.aws_s3_bucket_object.lambda_s3_trigger_goobi_package.version_id
+  s3_bucket         = data.aws_s3_object.lambda_s3_trigger_goobi_package.bucket
+  s3_key            = data.aws_s3_object.lambda_s3_trigger_goobi_package.key
+  s3_object_version = data.aws_s3_object.lambda_s3_trigger_goobi_package.version_id
 
   role    = aws_iam_role.lambda_stage_iam_role.arn
   handler = "s3_trigger_goobi.lambda_handler"
@@ -157,9 +157,9 @@ resource "aws_lambda_function" "lambda_s3_trigger_goobi_stage_audio" {
   description   = "lambda to call Goobi API for import after successful S3 upload"
   function_name = "s3_trigger_goobi_stage_audio"
 
-  s3_bucket         = data.aws_s3_bucket_object.lambda_s3_trigger_goobi_package.bucket
-  s3_key            = data.aws_s3_bucket_object.lambda_s3_trigger_goobi_package.key
-  s3_object_version = data.aws_s3_bucket_object.lambda_s3_trigger_goobi_package.version_id
+  s3_bucket         = data.aws_s3_object.lambda_s3_trigger_goobi_package.bucket
+  s3_key            = data.aws_s3_object.lambda_s3_trigger_goobi_package.key
+  s3_object_version = data.aws_s3_object.lambda_s3_trigger_goobi_package.version_id
 
   role    = aws_iam_role.lambda_stage_iam_role.arn
   handler = "s3_trigger_goobi.lambda_handler"
