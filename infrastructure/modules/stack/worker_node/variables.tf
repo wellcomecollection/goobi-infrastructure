@@ -166,3 +166,24 @@ variable "scale_down_threshold" {
 variable "queue_job_name" {
   type = string
 }
+
+variable "db_server" {
+  type = string
+}
+
+variable "db_name" {
+  type    = string
+  default = "workernode"
+}
+
+variable "db_port" {
+  type = number
+}
+
+variable "db_user_key" {
+  type = string
+}
+
+variable "db_password_key" {
+  type = string
+}

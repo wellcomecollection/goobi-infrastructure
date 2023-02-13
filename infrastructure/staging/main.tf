@@ -178,6 +178,11 @@ module "worker_node_1" {
   goobi_external_job_queue     = module.queues.queue_job_name
   goobi_external_command_queue = module.queues.queue_command_name
   goobi_hostname               = "${module.goobi.name}.${aws_service_discovery_private_dns_namespace.namespace.name}"
+  db_server                    = module.goobi_rds_cluster_aurora3.host
+  db_port                      = module.goobi_rds_cluster_aurora3.port
+  db_name                      = "workernode"
+  db_user_key                  = local.db_user_key
+  db_password_key              = local.db_password_key
 
 
   volumes = [{
@@ -251,6 +256,11 @@ module "worker_node_bagit" {
   goobi_external_job_queue     = module.queues.queue_bagit_job_name
   goobi_external_command_queue = module.queues.queue_command_name
   goobi_hostname               = "${module.goobi.name}.${aws_service_discovery_private_dns_namespace.namespace.name}"
+  db_server                    = module.goobi_rds_cluster_aurora3.host
+  db_port                      = module.goobi_rds_cluster_aurora3.port
+  db_name                      = "workernode"
+  db_user_key                  = local.db_user_key
+  db_password_key              = local.db_password_key
 
   cluster_arn  = aws_ecs_cluster.cluster-ec2.arn
   cluster_name = aws_ecs_cluster.cluster-ec2.name

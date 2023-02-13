@@ -43,6 +43,9 @@ module "container_definition" {
     S3_DATA_BUCKET               = var.data_bucket_name
     TZ                           = "Europe/London"
     AWS_DEFAULT_REGION           = var.default_region
+    DB_SERVER                    = var.db_server
+    DB_PORT                      = var.db_port
+    DB_NAME                      = var.db_name
   }
 
   secrets = local.secrets
@@ -152,7 +155,7 @@ resource "aws_cloudwatch_metric_alarm" "low" {
   alarm_actions       = [module.autoscaling.scale_down_arn]
 
   metric_query {
-    id          = replace("${var.name}_scale_down","-","_")
+    id          = replace("${var.name}_scale_down", "-", "_")
     expression  = "visible+invisible"
     label       = "Visible plus invisible messages"
     return_data = "true"
