@@ -2,24 +2,31 @@ resource "aws_s3_bucket" "workflow-configuration" {
   bucket = "wellcomedigitalworkflow-workflow-configuration"
   acl    = "private"
 
-  versioning {
-    enabled = true
+  lifecycle {
+    prevent_destroy = true
   }
+}
 
-  lifecycle_rule {
-    enabled = true
+resource "aws_s3_bucket_versioning" "workflow-configuration_versioning" {
+  bucket = aws_s3_bucket.workflow-configuration.id
+  versioning_configuration {
+    status = "Enabled"
+  }
+}
+
+resource "aws_s3_bucket_lifecycle_configuration" "workflow-configuration_lifecycle" {
+  bucket = aws_s3_bucket.workflow-configuration.id
+  rule {
+    id     = "expiration"
+    status = "Enabled"
 
     noncurrent_version_expiration {
-      days = 90
+      noncurrent_days = 90
     }
 
     expiration {
       expired_object_delete_marker = true
     }
-  }
-
-  lifecycle {
-    prevent_destroy = true
   }
 }
 
@@ -30,31 +37,34 @@ resource "aws_s3_bucket" "workflow-data" {
   lifecycle {
     prevent_destroy = true
   }
+}
 
-  versioning {
-    enabled = true
+resource "aws_s3_bucket_versioning" "workflow-data_versioning" {
+  bucket = aws_s3_bucket.workflow-data.id
+  versioning_configuration {
+    status = "Enabled"
   }
+}
 
-  lifecycle_rule {
-    id      = "expire_noncurrent_versions"
-    enabled = true
-
+resource "aws_s3_bucket_lifecycle_configuration" "workflow-data_lifecycle" {
+  bucket = aws_s3_bucket.workflow-data.id
+  rule {
+    id     = "expire_noncurrent_versions"
+    status = "Enabled"
     noncurrent_version_transition {
-      days          = 30
-      storage_class = "STANDARD_IA"
+      noncurrent_days = 30
+      storage_class   = "STANDARD_IA"
     }
     noncurrent_version_expiration {
-      days = 60
+      noncurrent_days = 60
     }
     expiration {
       expired_object_delete_marker = true
     }
   }
-
-  lifecycle_rule {
-    id      = "transition_objects_to_standard_ia"
-    enabled = true
-
+  rule {
+    id     = "transition_objects_to_standard_ia"
+    status = "Enabled"
     transition {
       days          = 30
       storage_class = "STANDARD_IA"
@@ -69,16 +79,22 @@ resource "aws_s3_bucket" "workflow-infra" {
   lifecycle {
     prevent_destroy = true
   }
+}
 
-  versioning {
-    enabled = true
+resource "aws_s3_bucket_versioning" "workflow-infra_versioning" {
+  bucket = aws_s3_bucket.workflow-infra.id
+  versioning_configuration {
+    status = "Enabled"
   }
+}
 
-  lifecycle_rule {
-    enabled = true
-
+resource "aws_s3_bucket_lifecycle_configuration" "workflow-infra_lifecycle" {
+  bucket = aws_s3_bucket.workflow-infra.id
+  rule {
+    id     = "expiration"
+    status = "Enabled"
     noncurrent_version_expiration {
-      days = 60
+      noncurrent_days = 60
     }
 
     expiration {
@@ -94,15 +110,19 @@ resource "aws_s3_bucket" "workflow-export-bagit" {
   lifecycle {
     prevent_destroy = true
   }
+}
 
-  lifecycle_rule {
-    id      = "expire_all_objects"
-    enabled = true
+resource "aws_s3_bucket_lifecycle_configuration" "workflow-export-bagit" {
+  bucket = aws_s3_bucket.workflow-export-bagit.id
+  rule {
+    status = "Enabled"
+    id     = "expire_all_objects"
 
     expiration {
       days = 10
     }
   }
+
 }
 
 resource "aws_s3_bucket_policy" "workflow-export-bagit-external-access-policy" {
@@ -117,16 +137,23 @@ resource "aws_s3_bucket" "workflow-harvesting-results" {
   lifecycle {
     prevent_destroy = true
   }
+}
 
-  versioning {
-    enabled = true
+resource "aws_s3_bucket_versioning" "workflow-harvesting-results_versioning" {
+  bucket = aws_s3_bucket.workflow-harvesting-results.id
+  versioning_configuration {
+    status = "Enabled"
   }
+}
 
-  lifecycle_rule {
-    enabled = true
+resource "aws_s3_bucket_lifecycle_configuration" "workflow-harvesting-results_lifecycle" {
+  bucket = aws_s3_bucket.workflow-harvesting-results.id
 
+  rule {
+    id     = "expiration"
+    status = "Enabled"
     noncurrent_version_expiration {
-      days = 90
+      noncurrent_days = 90
     }
 
     expiration {
@@ -134,7 +161,6 @@ resource "aws_s3_bucket" "workflow-harvesting-results" {
     }
   }
 }
-
 resource "aws_s3_bucket" "workflow-upload" {
   bucket = "wellcomecollection-workflow-upload"
   acl    = "private"
