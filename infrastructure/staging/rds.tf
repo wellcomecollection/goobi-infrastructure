@@ -10,7 +10,7 @@ module "goobi_rds_cluster_aurora3" {
   backup_retention_period = "14"
   deletion_protection     = "true"
   engine                  = "aurora-mysql"
-  engine_version          = "8.0.mysql_aurora.3.02.0"
+  engine_version          = "8.0.mysql_aurora.3.02.2"
 
   # The database is in a private subnet, so this CIDR only gives access to
   # other instances in the private subnet (in order to reach via bastion host)
