@@ -44,6 +44,12 @@ resource "aws_iam_role_policy" "ecs_goobi_s3_allow_storage_archive_access" {
   policy = data.aws_iam_policy_document.allow_storage_archive_access.json
 }
 
+# allow goobi task to publish to SNS topic for output notification
+resource "aws_iam_role_policy" "ecs_goobi_sns_output_notification_allow_publish" {
+  role   = module.goobi.task_role
+  policy = module.sns_topic_output_notification.publish_policy
+}
+
 resource "aws_iam_role_policy" "ecs_itm_s3_config_read" {
   role   = module.itm.task_role
   policy = data.aws_iam_policy_document.s3_read_workflow-configuration.json

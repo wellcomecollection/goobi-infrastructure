@@ -123,6 +123,7 @@ module "goobi" {
   goobi_external_command_queue   = module.queues.queue_command_name
   goobi_external_job_dlq         = module.queues.dlq_job_name
   goobi_external_bagit_job_queue = module.queues.queue_bagit_job_name
+  sns_topic_output_notification  = module.sns_topic_output_notification.arn
 
   cluster_arn = aws_ecs_cluster.cluster.arn
 
@@ -312,3 +313,9 @@ resource "aws_cloudwatch_log_group" "cloudwatch_log_group_workernode_bagit_stage
   retention_in_days = "14"
 }
 
+# SNS topic for DDS notification
+module "sns_topic_output_notification" {
+  source = "github.com/wellcomecollection/terraform-aws-sns-topic.git?ref=v1.0.1"
+  name   = "digitised-bag-notifications-workflow-staging"
+  # TODO add cross account subscription ids
+}
