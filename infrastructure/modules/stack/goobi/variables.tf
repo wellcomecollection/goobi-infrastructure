@@ -125,3 +125,8 @@ variable "goobi_external_bagit_job_queue" {
   type    = string
   default = null
 }
+
+variable "sns_topic_output_notification" {
+  type    = string
+  default = null
+}
