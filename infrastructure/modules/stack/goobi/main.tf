@@ -44,7 +44,7 @@ module "app_container_definition" {
     GOOBI_EXTERNAL_COMMAND_QUEUE = var.goobi_external_command_queue
     GOOBI_EXTERNAL_JOB_DLQ       = var.goobi_external_job_dlq
     bagitqueue                   = var.goobi_external_bagit_job_queue
-    SNS_DDS_TOPIC                = var.sns_topic_output_notification
+    AWS_SNS_TOPICARN             = var.sns_topic_output_notification
   }
 
   secrets = local.secrets
