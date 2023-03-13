@@ -317,5 +317,7 @@ resource "aws_cloudwatch_log_group" "cloudwatch_log_group_workernode_bagit_stage
 module "sns_topic_output_notification" {
   source = "github.com/wellcomecollection/terraform-aws-sns-topic.git?ref=v1.0.1"
   name   = "digitised-bag-notifications-workflow-staging"
-  # TODO add cross account subscription ids
+  cross_account_subscription_ids = [
+    "${local.account_id_digirati}"
+  ]
 }
