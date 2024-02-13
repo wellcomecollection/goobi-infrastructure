@@ -19,7 +19,7 @@ module "efs-workernode" {
 
   name = "workflow-stage-workernode-storage"
 
-  throughput_mode = "provisioned"
+  throughput_mode                 = "provisioned"
   provisioned_throughput_in_mibps = "20"
 
   vpc_id  = module.network.vpc_id

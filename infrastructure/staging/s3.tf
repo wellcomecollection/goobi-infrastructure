@@ -119,7 +119,7 @@ resource "aws_s3_bucket_lifecycle_configuration" "workflow-stage-harvesting-resu
   bucket = aws_s3_bucket.workflow-stage-harvesting-results.id
 
   rule {
-    id = "expiration"
+    id     = "expiration"
     status = "Enabled"
     noncurrent_version_expiration {
       noncurrent_days = 90
