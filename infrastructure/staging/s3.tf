@@ -162,6 +162,10 @@ data "aws_iam_policy_document" "workflow-stage-upload" {
     principals {
       identifiers = [
         "arn:aws:iam::404315009621:role/digitisation-developer",
+        "arn:aws:iam::760097843905:root",
+        "arn:aws:iam::299497370133:root",
+        "arn:aws:iam::404315009621:root",
+        "arn:aws:iam::653428163053:root"
       ]
 
       type = "AWS"
