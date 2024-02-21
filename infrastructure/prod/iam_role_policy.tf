@@ -45,21 +45,6 @@ resource "aws_iam_role_policy" "ecs_goobi_sns_output_notification_allow_publish"
   policy = module.sns_topic_output_notification.publish_policy
 }
 
-resource "aws_iam_role_policy" "ecs_itm_s3_config_read" {
-  role   = module.itm.task_role
-  policy = data.aws_iam_policy_document.s3_read_workflow-configuration.json
-}
-
-resource "aws_iam_role_policy" "ecs_itm_s3_data_rw" {
-  role   = module.itm.task_role
-  policy = data.aws_iam_policy_document.s3_rw_workflow-data.json
-}
-
-resource "aws_iam_role_policy" "ecs_itm_s3_editorial_photography_upload_external" {
-  role   = module.itm.task_role
-  policy = data.aws_iam_policy_document.s3_editorial_photography_upload_external.json
-}
-
 resource "aws_iam_role_policy" "ecs_harvester_s3_config_read" {
   role   = module.harvester.task_role
   policy = data.aws_iam_policy_document.s3_read_workflow-configuration.json

@@ -71,50 +71,6 @@ module "harvester" {
   service_discovery_namespace_id = aws_service_discovery_private_dns_namespace.namespace.id
 }
 
-module "itm" {
-  source = "../modules/stack/itm"
-
-  name = "${local.environment_name}-itm"
-
-  data_bucket_name          = aws_s3_bucket.workflow-data.bucket
-  configuration_bucket_name = aws_s3_bucket.workflow-configuration.bucket
-
-  cpu    = "1024"
-  memory = "4096"
-
-  cluster_arn = aws_ecs_cluster.cluster.arn
-
-  subnets = module.network.private_subnets
-
-  security_group_ids = [
-    aws_security_group.service_egress.id,
-    aws_security_group.interservice.id,
-    aws_security_group.efs.id,
-    aws_security_group.service_lb.id
-  ]
-
-  efs_id = module.efs.efs_id
-
-  itm_container_image   = local.itm_container_image
-  proxy_container_image = local.proxy_container_image
-
-  db_server       = module.goobi_rds_cluster_aurora3.host
-  db_port         = module.goobi_rds_cluster_aurora3.port
-  db_name         = "itm"
-  db_user_key     = local.db_user_key
-  db_password_key = local.db_password_key
-
-  host_name    = var.domain_name
-  path_pattern = "/itm/*"
-  source_ips   = local.itm_source_ips
-
-  vpc_id = module.network.vpc_id
-
-  alb_listener_arn = module.load_balancer.https_listener_arn
-
-  service_discovery_namespace_id = aws_service_discovery_private_dns_namespace.namespace.id
-}
-
 module "goobi" {
   source = "../modules/stack/goobi"
 
