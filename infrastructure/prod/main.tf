@@ -194,6 +194,7 @@ module "ec2_cluster_capacity_provider" {
   // The cluster name is required for the instance user data script
   // This is a known issue https://github.com/terraform-providers/terraform-provider-aws/issues/12739
   cluster_name = "${local.environment_name}_ec2"
+  ami_id = data.aws_ami.container_host_ami.image_id
 
   instance_type           = "t3.medium"
   max_instances           = 2

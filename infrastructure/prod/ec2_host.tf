@@ -1,5 +1,5 @@
 resource "aws_instance" "access_host" {
-  ami           = data.aws_ami.amazon-linux-2.id
+  ami           = local.bastion_host_ami_id
   instance_type = var.access_host_instance_type
   key_name      = var.access_host_key_name
   vpc_security_group_ids = [
@@ -57,17 +57,6 @@ resource "aws_security_group" "access_host_full_egress" {
     create_before_destroy = true
   }
 }
-
-data "aws_ami" "amazon-linux-2" {
-  most_recent = true
-  owners      = ["amazon"]
-
-  filter {
-    name   = "name"
-    values = ["amzn2-ami-hvm*"]
-  }
-}
-
 
 resource "random_id" "sg_append" {
   keepers = {
