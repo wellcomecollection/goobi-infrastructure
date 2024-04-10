@@ -46,6 +46,7 @@ module "container_definition" {
     DB_SERVER                    = var.db_server
     DB_PORT                      = var.db_port
     DB_NAME                      = var.db_name
+    JAVA_TOOL_OPTIONS            = "-Xmx${var.memory * 0.5}m"
   }
 
   secrets = local.secrets
