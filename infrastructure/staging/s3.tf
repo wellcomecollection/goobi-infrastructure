@@ -133,10 +133,16 @@ resource "aws_s3_bucket_lifecycle_configuration" "workflow-stage-harvesting-resu
 
 resource "aws_s3_bucket" "workflow-stage-upload" {
   bucket = "wellcomecollection-workflow-stage-upload"
-  acl    = "private"
 
   lifecycle {
     prevent_destroy = true
+  }
+}
+
+resource "aws_s3_bucket_ownership_controls" "workflow-stage-upload" {
+  bucket = aws_s3_bucket.workflow-stage-upload.id
+  rule {
+    object_ownership = "BucketOwnerEnforced"
   }
 }
 
