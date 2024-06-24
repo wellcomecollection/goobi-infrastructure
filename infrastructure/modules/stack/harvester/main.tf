@@ -9,18 +9,7 @@ module "app_container_definition" {
     sourceVolume  = "efs"
   }]
 
-  log_configuration = {
-    logDriver = "awslogs"
-
-    options = {
-      "awslogs-group"         = "ecs/${var.name}",
-      "awslogs-region"        = "eu-west-1",
-      "awslogs-create-group"  = "true",
-      "awslogs-stream-prefix" = var.name
-    }
-
-    secretOptions = null
-  }
+  log_configuration = module.log_router_container.container_log_configuration
 
   environment = {
     CONFIGSOURCE                 = "s3"
@@ -54,18 +43,7 @@ module "proxy_container_definition" {
     }
   ]
 
-  log_configuration = {
-    logDriver = "awslogs"
-
-    options = {
-      "awslogs-group"         = "ecs/${var.name}",
-      "awslogs-region"        = "eu-west-1",
-      "awslogs-create-group"  = "true",
-      "awslogs-stream-prefix" = var.name
-    }
-
-    secretOptions = null
-  }
+  log_configuration = module.log_router_container.container_log_configuration
 
   environment = {
     SERVERNAME    = var.host_name
@@ -76,6 +54,17 @@ module "proxy_container_definition" {
   }
 }
 
+module "log_router_container" {
+  source    = "git::github.com/wellcomecollection/terraform-aws-ecs-service.git//modules/firelens?ref=v3.15.3"
+  namespace = var.name
+}
+
+module "log_router_container_secrets_permissions" {
+  source    = "git::github.com/wellcomecollection/terraform-aws-ecs-service.git//modules/secrets?ref=v3.15.3"
+  secrets   = module.log_router_container.shared_secrets_logging
+  role_name = module.task_definition.task_execution_role_name
+}
+
 module "task_definition" {
   source = "git::https://github.com/wellcomecollection/terraform-aws-ecs-service.git//modules/task_definition?ref=v3.11.1"
 
@@ -84,7 +73,8 @@ module "task_definition" {
 
   container_definitions = [
     module.app_container_definition.container_definition,
-    module.proxy_container_definition.container_definition
+    module.proxy_container_definition.container_definition,
+    module.log_router_container.container_definition
   ]
 
   efs_volumes = [{
