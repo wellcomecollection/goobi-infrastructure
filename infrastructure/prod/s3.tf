@@ -163,10 +163,16 @@ resource "aws_s3_bucket_lifecycle_configuration" "workflow-harvesting-results_li
 }
 resource "aws_s3_bucket" "workflow-upload" {
   bucket = "wellcomecollection-workflow-upload"
-  acl    = "private"
-
+  
   lifecycle {
     prevent_destroy = true
+  }
+}
+
+resource "aws_s3_bucket_ownership_controls" "workflow-upload" {
+  bucket = aws_s3_bucket.workflow-upload.id
+  rule {
+    object_ownership = "BucketOwnerEnforced"
   }
 }
 
