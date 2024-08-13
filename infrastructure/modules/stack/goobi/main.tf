@@ -120,7 +120,7 @@ module "service" {
   deployment_minimum_healthy_percent = 0
   deployment_maximum_percent         = 100
 
-  target_group_arn = aws_alb_target_group.itm.arn
+  target_group_arn = aws_alb_target_group.goobi.arn
 
   container_port = var.container_port
 
