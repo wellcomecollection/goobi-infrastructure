@@ -1,8 +1,3 @@
-moved {
-  from = aws_alb_target_group.itm
-  to = aws_alb_target_group.goobi
-}
-
 resource "aws_alb_target_group" "goobi" {
   # We use snake case in a lot of places, but ALB Target Group names can
   # only contain alphanumerics and hyphens.
