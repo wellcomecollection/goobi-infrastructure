@@ -1,13 +1,13 @@
 module "lambda_s3_trigger_goobi_ep" {
-  source = "git::https://github.com/wellcomecollection/terraform-aws-lambda.git//?ref=v1.2.0"
-  name = "${local.environment_name}-lambda_s3_trigger_goobi_ep"
-  runtime = "python3.9"
-  handler = "s3_trigger_goobi.lambda_handler"
-  description   = "lambda to call Goobi API for import after successful S3 upload"
+  source            = "git::https://github.com/wellcomecollection/terraform-aws-lambda.git//?ref=v1.2.0"
+  name              = "${local.environment_name}-lambda_s3_trigger_goobi_ep"
+  runtime           = "python3.9"
+  handler           = "s3_trigger_goobi.lambda_handler"
+  description       = "lambda to call Goobi API for import after successful S3 upload"
   s3_bucket         = data.aws_s3_object.lambda_s3_trigger_goobi_package.bucket
   s3_key            = data.aws_s3_object.lambda_s3_trigger_goobi_package.key
   s3_object_version = data.aws_s3_object.lambda_s3_trigger_goobi_package.version_id
-  timeout = "60"
+  timeout           = "60"
   vpc_config = {
     security_group_ids = [
       aws_security_group.interservice.id,
@@ -16,7 +16,7 @@ module "lambda_s3_trigger_goobi_ep" {
 
     subnet_ids = module.network.private_subnets
   }
-  publish = true
+  publish     = true
   memory_size = "128"
   environment = {
     variables = {
@@ -43,16 +43,15 @@ resource "aws_lambda_permission" "allow_event_s3_trigger_goobi_stage_ep" {
   source_arn    = aws_s3_bucket.workflow-stage-upload.arn
 }
 
-
-resource "aws_lambda_function" "lambda_s3_trigger_goobi_stage_digitised" {
-  description   = "lambda to call Goobi API for import after successful S3 upload"
-  function_name = "s3_trigger_goobi_stage_digitised"
+module "lambda_s3_trigger_goobi_digitised" {
+  source      = "git::https://github.com/wellcomecollection/terraform-aws-lambda.git//?ref=v1.2.0"
+  description = "lambda to call Goobi API for import after successful S3 upload"
+  name        = "${local.environment_name}_lambda_s3_trigger_goobi_digitised"
 
   s3_bucket         = data.aws_s3_object.lambda_s3_trigger_goobi_package.bucket
   s3_key            = data.aws_s3_object.lambda_s3_trigger_goobi_package.key
   s3_object_version = data.aws_s3_object.lambda_s3_trigger_goobi_package.version_id
 
-  role    = aws_iam_role.lambda_stage_iam_role.arn
   handler = "s3_trigger_goobi.lambda_handler"
   runtime = "python3.9"
   timeout = "60"
@@ -60,7 +59,7 @@ resource "aws_lambda_function" "lambda_s3_trigger_goobi_stage_digitised" {
 
   memory_size = "128"
 
-  environment {
+  environment = {
     variables = {
       API_ENDPOINT     = local.lambda_api_endpoint_digitised
       TOKEN            = local.lambda_token_digitised
@@ -70,7 +69,7 @@ resource "aws_lambda_function" "lambda_s3_trigger_goobi_stage_digitised" {
     }
   }
 
-  vpc_config {
+  vpc_config = {
     security_group_ids = [
       aws_security_group.interservice.id,
       aws_security_group.service_egress.id,
@@ -83,26 +82,19 @@ resource "aws_lambda_function" "lambda_s3_trigger_goobi_stage_digitised" {
 resource "aws_lambda_permission" "allow_event_s3_trigger_goobi_stage_digitised" {
   statement_id  = "AllowExecutionFromS3Bucket"
   action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.lambda_s3_trigger_goobi_stage_digitised.arn
+  function_name = module.lambda_s3_trigger_goobi_digitised.lambda.function_name
   principal     = "s3.amazonaws.com"
   source_arn    = aws_s3_bucket.workflow-stage-upload.arn
 }
-
-resource "aws_cloudwatch_log_group" "cloudwatch_log_group_s3_trigger_goobi_stage_digitised" {
-  name = "/aws/lambda/s3_trigger_goobi_stage_digitised"
-
-  retention_in_days = "14"
-}
-
-resource "aws_lambda_function" "lambda_s3_trigger_goobi_stage_video" {
-  description   = "lambda to call Goobi API for import after successful S3 upload"
-  function_name = "s3_trigger_goobi_stage_video"
+module "lambda_s3_trigger_goobi_video" {
+  source      = "git::https://github.com/wellcomecollection/terraform-aws-lambda.git//?ref=v1.2.0"
+  description = "lambda to call Goobi API for import after successful S3 upload"
+  name        = "${local.environment_name}_lambda_s3_trigger_goobi_video"
 
   s3_bucket         = data.aws_s3_object.lambda_s3_trigger_goobi_package.bucket
   s3_key            = data.aws_s3_object.lambda_s3_trigger_goobi_package.key
   s3_object_version = data.aws_s3_object.lambda_s3_trigger_goobi_package.version_id
 
-  role    = aws_iam_role.lambda_stage_iam_role.arn
   handler = "s3_trigger_goobi.lambda_handler"
   runtime = "python3.9"
   timeout = "60"
@@ -110,7 +102,7 @@ resource "aws_lambda_function" "lambda_s3_trigger_goobi_stage_video" {
 
   memory_size = "128"
 
-  environment {
+  environment = {
     variables = {
       API_ENDPOINT     = local.lambda_api_endpoint_video
       TOKEN            = local.lambda_token_video
@@ -120,7 +112,7 @@ resource "aws_lambda_function" "lambda_s3_trigger_goobi_stage_video" {
     }
   }
 
-  vpc_config {
+  vpc_config = {
     security_group_ids = [
       aws_security_group.interservice.id,
       aws_security_group.service_egress.id,
@@ -133,26 +125,20 @@ resource "aws_lambda_function" "lambda_s3_trigger_goobi_stage_video" {
 resource "aws_lambda_permission" "allow_event_s3_trigger_goobi_stage_video" {
   statement_id  = "AllowExecutionFromS3Bucket"
   action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.lambda_s3_trigger_goobi_stage_video.arn
+  function_name = module.lambda_s3_trigger_goobi_video.lambda.function_name
   principal     = "s3.amazonaws.com"
   source_arn    = aws_s3_bucket.workflow-stage-upload.arn
 }
 
-resource "aws_cloudwatch_log_group" "cloudwatch_log_group_s3_trigger_goobi_stage_video" {
-  name = "/aws/lambda/s3_trigger_goobi_stage_video"
-
-  retention_in_days = "14"
-}
-
-resource "aws_lambda_function" "lambda_s3_trigger_goobi_stage_audio" {
-  description   = "lambda to call Goobi API for import after successful S3 upload"
-  function_name = "s3_trigger_goobi_stage_audio"
+module "lambda_s3_trigger_goobi_audio" {
+  source      = "git::https://github.com/wellcomecollection/terraform-aws-lambda.git//?ref=v1.2.0"
+  description = "lambda to call Goobi API for import after successful S3 upload"
+  name        = "${local.environment_name}_lambda_s3_trigger_goobi_audio"
 
   s3_bucket         = data.aws_s3_object.lambda_s3_trigger_goobi_package.bucket
   s3_key            = data.aws_s3_object.lambda_s3_trigger_goobi_package.key
   s3_object_version = data.aws_s3_object.lambda_s3_trigger_goobi_package.version_id
 
-  role    = aws_iam_role.lambda_stage_iam_role.arn
   handler = "s3_trigger_goobi.lambda_handler"
   runtime = "python3.9"
   timeout = "60"
@@ -160,7 +146,7 @@ resource "aws_lambda_function" "lambda_s3_trigger_goobi_stage_audio" {
 
   memory_size = "128"
 
-  environment {
+  environment = {
     variables = {
       API_ENDPOINT     = local.lambda_api_endpoint_audio
       TOKEN            = local.lambda_token_audio
@@ -170,7 +156,7 @@ resource "aws_lambda_function" "lambda_s3_trigger_goobi_stage_audio" {
     }
   }
 
-  vpc_config {
+  vpc_config = {
     security_group_ids = [
       aws_security_group.interservice.id,
       aws_security_group.service_egress.id,
@@ -183,13 +169,7 @@ resource "aws_lambda_function" "lambda_s3_trigger_goobi_stage_audio" {
 resource "aws_lambda_permission" "allow_event_s3_trigger_goobi_stage_audio" {
   statement_id  = "AllowExecutionFromS3Bucket"
   action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.lambda_s3_trigger_goobi_stage_audio.arn
+  function_name = module.lambda_s3_trigger_goobi_audio.lambda.function_name
   principal     = "s3.amazonaws.com"
   source_arn    = aws_s3_bucket.workflow-stage-upload.arn
-}
-
-resource "aws_cloudwatch_log_group" "cloudwatch_log_group_s3_trigger_goobi_stage_audio" {
-  name = "/aws/lambda/s3_trigger_goobi_stage_audio"
-
-  retention_in_days = "14"
 }
