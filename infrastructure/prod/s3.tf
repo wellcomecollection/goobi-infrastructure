@@ -213,196 +213,196 @@ resource "aws_s3_bucket_notification" "bucket_notification_workflow-upload" {
   bucket = aws_s3_bucket.workflow-upload.id
 
   lambda_function {
-    lambda_function_arn = aws_lambda_function.lambda_s3_trigger_goobi_ep.arn
+    lambda_function_arn = module.lambda_s3_trigger_goobi_ep.lambda.arn
     events              = ["s3:ObjectCreated:*"]
     filter_prefix       = "editorial/"
     filter_suffix       = ".zip"
   }
 
   lambda_function {
-    lambda_function_arn = aws_lambda_function.lambda_s3_trigger_goobi_ep.arn
+    lambda_function_arn = module.lambda_s3_trigger_goobi_ep.lambda.arn
     events              = ["s3:ObjectCreated:*"]
     filter_prefix       = "editorial/"
     filter_suffix       = ".ZIP"
   }
 
   lambda_function {
-    lambda_function_arn = aws_lambda_function.lambda_s3_trigger_goobi_digitised.arn
+    lambda_function_arn = module.lambda_s3_trigger_goobi_digitised.lambda.arn
     events              = ["s3:ObjectCreated:*"]
     filter_prefix       = "digitised/"
     filter_suffix       = ".zip"
   }
 
   lambda_function {
-    lambda_function_arn = aws_lambda_function.lambda_s3_trigger_goobi_digitised.arn
+    lambda_function_arn = module.lambda_s3_trigger_goobi_digitised.lambda.arn
     events              = ["s3:ObjectCreated:*"]
     filter_prefix       = "digitised/"
     filter_suffix       = ".ZIP"
   }
 
   lambda_function {
-    lambda_function_arn = aws_lambda_function.lambda_s3_trigger_goobi_video.arn
+    lambda_function_arn = module.lambda_s3_trigger_goobi_video.lambda.arn
     events              = ["s3:ObjectCreated:*"]
     filter_prefix       = "video/"
     filter_suffix       = ".mpg"
   }
 
   lambda_function {
-    lambda_function_arn = aws_lambda_function.lambda_s3_trigger_goobi_video.arn
+    lambda_function_arn = module.lambda_s3_trigger_goobi_video.lambda.arn
     events              = ["s3:ObjectCreated:*"]
     filter_prefix       = "video/"
     filter_suffix       = ".MPG"
   }
 
   lambda_function {
-    lambda_function_arn = aws_lambda_function.lambda_s3_trigger_goobi_video.arn
+    lambda_function_arn = module.lambda_s3_trigger_goobi_video.lambda.arn
     events              = ["s3:ObjectCreated:*"]
     filter_prefix       = "video/"
     filter_suffix       = ".mpeg"
   }
 
   lambda_function {
-    lambda_function_arn = aws_lambda_function.lambda_s3_trigger_goobi_video.arn
+    lambda_function_arn = module.lambda_s3_trigger_goobi_video.lambda.arn
     events              = ["s3:ObjectCreated:*"]
     filter_prefix       = "video/"
     filter_suffix       = ".MPEG"
   }
 
   lambda_function {
-    lambda_function_arn = aws_lambda_function.lambda_s3_trigger_goobi_video.arn
+    lambda_function_arn = module.lambda_s3_trigger_goobi_video.lambda.arn
     events              = ["s3:ObjectCreated:*"]
     filter_prefix       = "video/"
     filter_suffix       = ".mp4"
   }
 
   lambda_function {
-    lambda_function_arn = aws_lambda_function.lambda_s3_trigger_goobi_video.arn
+    lambda_function_arn = module.lambda_s3_trigger_goobi_video.lambda.arn
     events              = ["s3:ObjectCreated:*"]
     filter_prefix       = "video/"
     filter_suffix       = ".MP4"
   }
 
   lambda_function {
-    lambda_function_arn = aws_lambda_function.lambda_s3_trigger_goobi_video.arn
+    lambda_function_arn = module.lambda_s3_trigger_goobi_video.lambda.arn
     events              = ["s3:ObjectCreated:*"]
     filter_prefix       = "video/"
     filter_suffix       = ".mxf"
   }
 
   lambda_function {
-    lambda_function_arn = aws_lambda_function.lambda_s3_trigger_goobi_video.arn
+    lambda_function_arn = module.lambda_s3_trigger_goobi_video.lambda.arn
     events              = ["s3:ObjectCreated:*"]
     filter_prefix       = "video/"
     filter_suffix       = ".MXF"
   }
 
   lambda_function {
-    lambda_function_arn = aws_lambda_function.lambda_s3_trigger_goobi_video.arn
+    lambda_function_arn = module.lambda_s3_trigger_goobi_video.lambda.arn
     events              = ["s3:ObjectCreated:*"]
     filter_prefix       = "video/"
     filter_suffix       = ".jpg"
   }
 
   lambda_function {
-    lambda_function_arn = aws_lambda_function.lambda_s3_trigger_goobi_video.arn
+    lambda_function_arn = module.lambda_s3_trigger_goobi_video.lambda.arn
     events              = ["s3:ObjectCreated:*"]
     filter_prefix       = "video/"
     filter_suffix       = ".JPG"
   }
 
   lambda_function {
-    lambda_function_arn = aws_lambda_function.lambda_s3_trigger_goobi_video.arn
+    lambda_function_arn = module.lambda_s3_trigger_goobi_video.lambda.arn
     events              = ["s3:ObjectCreated:*"]
     filter_prefix       = "video/"
     filter_suffix       = ".jpeg"
   }
 
   lambda_function {
-    lambda_function_arn = aws_lambda_function.lambda_s3_trigger_goobi_video.arn
+    lambda_function_arn = module.lambda_s3_trigger_goobi_video.lambda.arn
     events              = ["s3:ObjectCreated:*"]
     filter_prefix       = "video/"
     filter_suffix       = ".JPEG"
   }
 
   lambda_function {
-    lambda_function_arn = aws_lambda_function.lambda_s3_trigger_goobi_video.arn
+    lambda_function_arn = module.lambda_s3_trigger_goobi_video.lambda.arn
     events              = ["s3:ObjectCreated:*"]
     filter_prefix       = "video/"
     filter_suffix       = ".pdf"
   }
 
   lambda_function {
-    lambda_function_arn = aws_lambda_function.lambda_s3_trigger_goobi_video.arn
+    lambda_function_arn = module.lambda_s3_trigger_goobi_video.lambda.arn
     events              = ["s3:ObjectCreated:*"]
     filter_prefix       = "video/"
     filter_suffix       = ".PDF"
   }
 
   lambda_function {
-    lambda_function_arn = aws_lambda_function.lambda_s3_trigger_goobi_video.arn
+    lambda_function_arn = module.lambda_s3_trigger_goobi_video.lambda.arn
     events              = ["s3:ObjectCreated:*"]
     filter_prefix       = "video/"
     filter_suffix       = ".zip"
   }
 
   lambda_function {
-    lambda_function_arn = aws_lambda_function.lambda_s3_trigger_goobi_video.arn
+    lambda_function_arn = module.lambda_s3_trigger_goobi_video.lambda.arn
     events              = ["s3:ObjectCreated:*"]
     filter_prefix       = "video/"
     filter_suffix       = ".ZIP"
   }
 
   lambda_function {
-    lambda_function_arn = aws_lambda_function.lambda_s3_trigger_goobi_audio.arn
+    lambda_function_arn = module.lambda_s3_trigger_goobi_audio.lambda.arn
     events              = ["s3:ObjectCreated:*"]
     filter_prefix       = "audio/"
     filter_suffix       = ".jpg"
   }
 
   lambda_function {
-    lambda_function_arn = aws_lambda_function.lambda_s3_trigger_goobi_audio.arn
+    lambda_function_arn = module.lambda_s3_trigger_goobi_audio.lambda.arn
     events              = ["s3:ObjectCreated:*"]
     filter_prefix       = "audio/"
     filter_suffix       = ".JPG"
   }
 
   lambda_function {
-    lambda_function_arn = aws_lambda_function.lambda_s3_trigger_goobi_audio.arn
+    lambda_function_arn = module.lambda_s3_trigger_goobi_audio.lambda.arn
     events              = ["s3:ObjectCreated:*"]
     filter_prefix       = "audio/"
     filter_suffix       = ".pdf"
   }
 
   lambda_function {
-    lambda_function_arn = aws_lambda_function.lambda_s3_trigger_goobi_audio.arn
+    lambda_function_arn = module.lambda_s3_trigger_goobi_audio.lambda.arn
     events              = ["s3:ObjectCreated:*"]
     filter_prefix       = "audio/"
     filter_suffix       = ".PDF"
   }
 
   lambda_function {
-    lambda_function_arn = aws_lambda_function.lambda_s3_trigger_goobi_audio.arn
+    lambda_function_arn = module.lambda_s3_trigger_goobi_audio.lambda.arn
     events              = ["s3:ObjectCreated:*"]
     filter_prefix       = "audio/"
     filter_suffix       = ".mp3"
   }
 
   lambda_function {
-    lambda_function_arn = aws_lambda_function.lambda_s3_trigger_goobi_audio.arn
+    lambda_function_arn = module.lambda_s3_trigger_goobi_audio.lambda.arn
     events              = ["s3:ObjectCreated:*"]
     filter_prefix       = "audio/"
     filter_suffix       = ".MP3"
   }
 
   lambda_function {
-    lambda_function_arn = aws_lambda_function.lambda_s3_trigger_goobi_audio.arn
+    lambda_function_arn = module.lambda_s3_trigger_goobi_audio.lambda.arn
     events              = ["s3:ObjectCreated:*"]
     filter_prefix       = "audio/"
     filter_suffix       = ".wav"
   }
 
   lambda_function {
-    lambda_function_arn = aws_lambda_function.lambda_s3_trigger_goobi_audio.arn
+    lambda_function_arn = module.lambda_s3_trigger_goobi_audio.lambda.arn
     events              = ["s3:ObjectCreated:*"]
     filter_prefix       = "audio/"
     filter_suffix       = ".WAV"
