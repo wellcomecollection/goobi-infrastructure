@@ -43,6 +43,14 @@ resource "aws_lambda_permission" "allow_event_s3_trigger_goobi_stage_ep" {
   source_arn    = aws_s3_bucket.workflow-stage-upload.arn
 }
 
+
+resource "aws_iam_role_policy" "lambda_ep_s3_upload_rw" {
+  name   = "lambda_ep_s3_upload"
+  role   = module.lambda_s3_trigger_goobi_ep.lambda_role.name
+  policy = data.aws_iam_policy_document.s3_workflow-upload.json
+}
+
+
 module "lambda_s3_trigger_goobi_digitised" {
   source      = "git::https://github.com/wellcomecollection/terraform-aws-lambda.git//?ref=v1.2.0"
   description = "lambda to call Goobi API for import after successful S3 upload"
@@ -86,6 +94,14 @@ resource "aws_lambda_permission" "allow_event_s3_trigger_goobi_stage_digitised" 
   principal     = "s3.amazonaws.com"
   source_arn    = aws_s3_bucket.workflow-stage-upload.arn
 }
+
+resource "aws_iam_role_policy" "lambda_digitised_s3_upload_rw" {
+  name   = "lambda_digitised_s3_upload"
+  role   = module.lambda_s3_trigger_goobi_digitised.lambda_role.name
+  policy = data.aws_iam_policy_document.s3_workflow-upload.json
+}
+
+
 module "lambda_s3_trigger_goobi_video" {
   source      = "git::https://github.com/wellcomecollection/terraform-aws-lambda.git//?ref=v1.2.0"
   description = "lambda to call Goobi API for import after successful S3 upload"
@@ -130,6 +146,12 @@ resource "aws_lambda_permission" "allow_event_s3_trigger_goobi_stage_video" {
   source_arn    = aws_s3_bucket.workflow-stage-upload.arn
 }
 
+resource "aws_iam_role_policy" "lambda_video_s3_upload_rw" {
+  name   = "lambda_video_s3_upload"
+  role   = module.lambda_s3_trigger_goobi_video.lambda_role.name
+  policy = data.aws_iam_policy_document.s3_workflow-upload.json
+}
+
 module "lambda_s3_trigger_goobi_audio" {
   source      = "git::https://github.com/wellcomecollection/terraform-aws-lambda.git//?ref=v1.2.0"
   description = "lambda to call Goobi API for import after successful S3 upload"
@@ -172,4 +194,10 @@ resource "aws_lambda_permission" "allow_event_s3_trigger_goobi_stage_audio" {
   function_name = module.lambda_s3_trigger_goobi_audio.lambda.function_name
   principal     = "s3.amazonaws.com"
   source_arn    = aws_s3_bucket.workflow-stage-upload.arn
+}
+
+resource "aws_iam_role_policy" "lambda_audio_s3_upload_rw" {
+  name   = "lambda_audio_s3_upload"
+  role   = module.lambda_s3_trigger_goobi_audio.lambda_role.name
+  policy = data.aws_iam_policy_document.s3_workflow-upload.json
 }
