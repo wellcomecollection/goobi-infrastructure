@@ -60,22 +60,6 @@ resource "aws_iam_role_policy" "ecs_harvester_s3_rw_workflow-harvesting-results"
   policy = data.aws_iam_policy_document.s3_rw_workflow-harvesting-results.json
 }
 
-resource "aws_iam_role_policy" "lambda_s3_upload_rw" {
-  name   = "lambda_s3_upload"
-  role   = aws_iam_role.lambda_stage_iam_role.name
-  policy = data.aws_iam_policy_document.s3_workflow-upload.json
-}
-
-resource "aws_iam_role_policy" "lambda_vpc_permissions" {
-  role   = aws_iam_role.lambda_stage_iam_role.name
-  policy = data.aws_iam_policy_document.lambda_vpc_permissions.json
-}
-
-resource "aws_iam_role_policy" "lambda_cloudwatch_permissions" {
-  role   = aws_iam_role.lambda_stage_iam_role.name
-  policy = data.aws_iam_policy_document.cloudwatch_logs.json
-}
-
 # worker node
 resource "aws_iam_role_policy" "ecs_worker_node_1_s3_config_read" {
   role   = module.worker_node_1.task_role
