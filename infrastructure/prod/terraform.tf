@@ -6,8 +6,10 @@ terraform {
     key            = "terraform/workflow.tfstate"
     dynamodb_table = "terraform-locktable"
 
-    role_arn = "arn:aws:iam::299497370133:role/workflow-developer"
-
+    assume_role = {
+      role_arn = "arn:aws:iam::299497370133:role/workflow-developer"
+    }
+    
     region = "eu-west-1"
   }
 }
