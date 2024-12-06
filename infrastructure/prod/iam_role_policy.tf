@@ -56,22 +56,6 @@ resource "aws_iam_role_policy" "ecs_harvester_s3_rw_workflow-harvesting-results"
 }
 
 
-resource "aws_iam_role_policy" "lambda_s3_upload_rw" {
-  name   = "lambda_s3_upload"
-  role   = aws_iam_role.lambda_iam_role.name
-  policy = data.aws_iam_policy_document.s3_workflow-upload.json
-}
-
-resource "aws_iam_role_policy" "lambda_vpc_permissions" {
-  role   = aws_iam_role.lambda_iam_role.name
-  policy = data.aws_iam_policy_document.lambda_vpc_permissions.json
-}
-
-resource "aws_iam_role_policy" "lambda_cloudwatch_permissions" {
-  role   = aws_iam_role.lambda_iam_role.name
-  policy = data.aws_iam_policy_document.cloudwatch_logs.json
-}
-
 resource "aws_iam_role_policy" "ecs_goobi_read_write_queue" {
   role   = module.goobi.task_role
   policy = module.queues.read_write_policy
