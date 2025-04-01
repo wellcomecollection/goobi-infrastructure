@@ -108,6 +108,7 @@ module "goobi" {
 
   host_name    = var.domain_name
   path_pattern = "/goobi/*"
+  source_ips   = local.goobi_source_ips
 
   vpc_id = module.network.vpc_id
 
