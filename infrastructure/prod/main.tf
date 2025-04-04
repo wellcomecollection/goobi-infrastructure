@@ -111,7 +111,8 @@ module "goobi" {
 
   host_name    = var.domain_name
   path_pattern = "/goobi/*"
-
+  source_ips   = local.goobi_source_ips
+  
   vpc_id = module.network.vpc_id
 
   alb_listener_arn = module.load_balancer.https_listener_arn
@@ -133,7 +134,7 @@ module "worker_node_1" {
   name = "${local.environment_name}-workernode_1"
 
   cpu    = "2048"
-  memory = "6144"
+  memory = "10240"
 
   working_storage_path         = "/workingstorage/tmp_workernode1"
   data_bucket_name             = aws_s3_bucket.workflow-data.bucket

@@ -6,6 +6,9 @@ data "aws_ssm_parameter" "harvester_source_ips" {
   name = "/workflow/config/prod/harvester_source_ips"
 }
 
+data "aws_ssm_parameter" "goobi_source_ips" {
+  name = "/workflow/config/prod/goobi_source_ips"
+}
 data "aws_ssm_parameter" "goobi_container_image" {
   name = "/workflow/images/prod/goobi"
 }
@@ -97,6 +100,8 @@ data "aws_ssm_parameter" "rds_password" {
 locals {
   admin_cidr_ingress                = split(",", data.aws_ssm_parameter.admin_cidr_ingress.value)
   harvester_source_ips              = split(",", data.aws_ssm_parameter.harvester_source_ips.value)
+  goobi_source_ips                  = split(",", data.aws_ssm_parameter.goobi_source_ips.value)
+
   goobi_container_image             = data.aws_ssm_parameter.goobi_container_image.value
   harvester_container_image         = data.aws_ssm_parameter.harvester_container_image.value
   proxy_container_image             = data.aws_ssm_parameter.proxy_container_image.value
