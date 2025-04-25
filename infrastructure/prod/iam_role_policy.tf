@@ -93,6 +93,11 @@ resource "aws_iam_role_policy" "ecs_worker_node_1_read_write_queue" {
   policy = module.queues.read_write_policy
 }
 
+resource "aws_iam_role_policy" "ecs_worker_node_1_goobi_s3_editorial_photography_allow_restore" {
+  role   = module.worker_node_1.task_role
+  policy = data.aws_iam_policy_document.s3_editorial_photography_allow_restore.json
+}
+
 # worker node bagit
 resource "aws_iam_role_policy" "ecs_worker_node_bagit_read_write_queue" {
   role   = module.worker_node_bagit.task_role
