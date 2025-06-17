@@ -1,3 +1,22 @@
+# EC2 Instance Role Policies for bastion hosts
+
+resource "aws_iam_role" "ec2_role" {
+  name = "${local.environment_name}-ec2_role"
+  assume_role_policy = data.aws_iam_policy_document.assume_ec2_role.json
+}
+
+resource "aws_iam_role_policy_attachment" "ssm_managed_instance_core" {
+  role       = aws_iam_role.ec2_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+}
+
+resource "aws_iam_instance_profile" "ec2_instance_profile" {
+  name = "${local.environment_name}-access_host_instance_profile"
+  role = aws_iam_role.ec2_role.name
+}
+
+# ECS Task Role Policies
+
 resource "aws_iam_role_policy" "ecs_goobi_s3_config_read" {
   role   = module.goobi.task_role
   policy = data.aws_iam_policy_document.s3_read_workflow-configuration.json
