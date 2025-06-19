@@ -9,7 +9,7 @@ resource "aws_instance" "access_host" {
   ]
   subnet_id                   = element(module.network.public_subnets, 0)
   associate_public_ip_address = true
-  #   user_data = 
+  iam_instance_profile        = aws_iam_instance_profile.ec2_instance_profile.name
 
   tags = {
     Name = "goobi-access-host-staging"
