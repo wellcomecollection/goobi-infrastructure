@@ -130,8 +130,8 @@ module "worker_node_1" {
 
   name = "${local.environment_name}-workernode_1"
 
-  cpu    = "2048"
-  memory = "6144"
+  cpu    = "4096"
+  memory = "18432"
 
   working_storage_path         = "/workingstorage/tmp_workernode1"
   data_bucket_name             = aws_s3_bucket.workflow-stage-data.bucket
