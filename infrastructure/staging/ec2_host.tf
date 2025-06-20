@@ -14,12 +14,6 @@ resource "aws_instance" "access_host" {
   tags = {
     Name = "goobi-access-host-staging"
   }
-
-  lifecycle {
-    ignore_changes = [
-      ami
-    ]
-  }
 }
 
 resource "aws_security_group" "ssh_controlled_ingress" {
