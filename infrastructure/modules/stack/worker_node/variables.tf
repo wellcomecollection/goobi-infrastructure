@@ -52,6 +52,11 @@ variable "memory" {
   default = 4096
 }
 
+variable "ephemeral_storage_size" {
+  type    = number
+  default = 21
+}
+
 variable "efs_id" {
   type = string
 }

@@ -133,8 +133,9 @@ module "worker_node_1" {
 
   name = "${local.environment_name}-workernode_1"
 
-  cpu    = "4096"
-  memory = "18432"
+  cpu                    = "4096"
+  memory                 = "18432"
+  ephemeral_storage_size = "50"
 
   working_storage_path         = "/workingstorage/tmp_workernode1"
   data_bucket_name             = aws_s3_bucket.workflow-data.bucket
@@ -215,8 +216,9 @@ module "worker_node_bagit" {
 
   name = "${local.environment_name}-workernode_bagit"
 
-  cpu    = null
-  memory = "1900"
+  cpu                    = null
+  memory                 = "1900"
+  ephemeral_storage_size = null
 
   working_storage_path         = "/var/scratch/"
   data_bucket_name             = aws_s3_bucket.workflow-data.bucket

@@ -54,10 +54,11 @@ module "log_router_container_secrets_permissions" {
 
 
 module "task_definition" {
-  source = "git::https://github.com/wellcomecollection/terraform-aws-ecs-service.git//modules/task_definition?ref=v3.11.1"
+  source = "git::https://github.com/wellcomecollection/terraform-aws-ecs-service.git//modules/task_definition?ref=v4.3.0"
 
   cpu    = var.cpu
   memory = var.memory
+  ephemeral_storage_size = var.ephemeral_storage_size
 
   container_definitions = [
     module.container_definition.container_definition,
