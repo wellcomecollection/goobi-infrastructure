@@ -130,3 +130,8 @@ variable "sns_topic_output_notification" {
   type    = string
   default = null
 }
+
+variable "app_path" {
+  type    = string
+  default = "goobi"
+}

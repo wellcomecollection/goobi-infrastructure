@@ -26,7 +26,7 @@ module "app_container_definition" {
     WORKING_STORAGE              = "/efs/tmp_goobi"
     SERVERNAME                   = var.host_name
     HTTPS_DOMAIN                 = var.host_name
-    APP_PATH                     = "goobi"
+    APP_PATH                     = var.app_path
     APP_CONTAINER                = "localhost"
     S3_DATA_BUCKET               = var.data_bucket_name
     GOOBI_EXTERNAL_JOB_QUEUE     = var.goobi_external_job_queue
