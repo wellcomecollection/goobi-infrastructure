@@ -135,3 +135,8 @@ variable "app_path" {
   type    = string
   default = "goobi"
 }
+
+variable "app_path_target" {
+  type    = string
+  default = "goobi"
+}

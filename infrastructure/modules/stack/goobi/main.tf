@@ -67,11 +67,12 @@ module "proxy_container_definition" {
   log_configuration = module.log_router_container.container_log_configuration
 
   environment = {
-    SERVERNAME    = var.host_name
-    HTTPS_DOMAIN  = var.host_name
-    APP_PATH      = "goobi"
-    APP_CONTAINER = "localhost"
-    TZ            = "Europe/London"
+    SERVERNAME      = var.host_name
+    HTTPS_DOMAIN    = var.host_name
+    APP_PATH        = var.app_path
+    APP_PATH_TARGET = var.app_path_target
+    APP_CONTAINER   = "localhost"
+    TZ              = "Europe/London"
   }
 }
 
