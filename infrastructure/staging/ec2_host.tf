@@ -11,6 +11,21 @@ resource "aws_instance" "access_host" {
   associate_public_ip_address = true
   iam_instance_profile        = aws_iam_instance_profile.ec2_instance_profile.name
 
+  user_data = <<-EOF
+    #cloud-config
+    packages:
+      - mariadb
+      - amazon-efs-utils
+
+    runcmd:
+      - mkdir -p /efs-workernode /efs
+      - echo "" >> /etc/fstab
+      - echo "${module.efs.efs_id}:/ /efs efs _netdev,noresvport,tls,nofail 0 0" >> /etc/fstab
+      - echo "${module.efs-workernode.efs_id}:/ /efs-workernode efs _netdev,noresvport,tls,nofail 0 0" >> /etc/fstab
+      - mount -a
+    EOF
+
+
   tags = {
     Name = "goobi-access-host-staging"
   }
