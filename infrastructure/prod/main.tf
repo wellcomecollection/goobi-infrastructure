@@ -109,9 +109,10 @@ module "goobi" {
   db_user_key     = local.db_user_key
   db_password_key = local.db_password_key
 
-  host_name    = var.domain_name
-  path_pattern = "/goobi/*"
-  source_ips   = local.goobi_source_ips
+  host_name       = var.domain_name
+  path_pattern    = "/goobi/*"
+  app_path_target = "goobi"
+  source_ips      = local.goobi_source_ips
   
   vpc_id = module.network.vpc_id
 

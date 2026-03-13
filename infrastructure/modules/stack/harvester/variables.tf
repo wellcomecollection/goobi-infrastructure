@@ -113,3 +113,13 @@ variable "ia_username_key" {
 variable "ia_password_key" {
   type = string
 }
+
+variable "app_path" {
+  type    = string
+  default = "harvester"
+}
+
+variable "app_path_target" {
+  type    = string
+  default = "harvester"
+}
