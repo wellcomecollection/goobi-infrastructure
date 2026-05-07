@@ -1,5 +1,5 @@
 resource "aws_instance" "access_host" {
-  ami           = local.bastion_host_ami_id
+  ami           = "resolve:ssm:arn:aws:ssm:eu-west-1:299497370133:parameter/imagebuilder/weco-al2023-x86_64/latest"
   instance_type = var.access_host_instance_type
   key_name      = var.access_host_key_name
   vpc_security_group_ids = [
