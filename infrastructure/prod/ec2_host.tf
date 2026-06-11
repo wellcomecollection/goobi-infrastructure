@@ -14,7 +14,7 @@ resource "aws_instance" "access_host" {
   user_data = <<-EOF
     #cloud-config
     packages:
-      - mariadb
+      - mariadb1011-client-utils
       - amazon-efs-utils
 
     runcmd:
