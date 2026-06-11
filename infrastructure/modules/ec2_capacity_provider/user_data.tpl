@@ -4,6 +4,7 @@ MIME-Version: 1.0
 --==BOUNDARY==
 Content-Type: text/cloud-boothook; charset="us-ascii"
 
+#!/bin/sh
 # Create /ebs folder
 cloud-init-per once mkdir_ebs mkdir -p ${ebs_host_path}
 
