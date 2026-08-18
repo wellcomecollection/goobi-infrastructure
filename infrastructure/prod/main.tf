@@ -135,7 +135,7 @@ module "worker_node_1" {
   name = "${local.environment_name}-workernode_1"
 
   cpu                    = "4096"
-  memory                 = "18432"
+  memory                 = "30720"
   ephemeral_storage_size = "50"
 
   working_storage_path         = "/workingstorage/tmp_workernode1"
